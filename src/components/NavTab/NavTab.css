@@ -1,0 +1,28 @@
+.nav {
+    background-color: rgba(39, 39, 39, 1);
+}
+
+.nav__container {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 24px 15px;
+}
+
+.nav__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.nav__link {
+    color: rgba(255, 255, 255, 1);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+}

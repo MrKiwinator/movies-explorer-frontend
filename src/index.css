@@ -1,0 +1,5 @@
+/* Vendor styles */
+@import url('./vendor/normalize.css');
+
+/* Fonts */
+@import url('./vendor/fonts/inter/inter.css')
