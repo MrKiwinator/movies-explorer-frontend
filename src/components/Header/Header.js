@@ -1,17 +1,35 @@
+import React from "react";
+import { 
+    useLocation, 
+    Link 
+} from "react-router-dom";
+import Menu from "../Menu/Menu";
 import './Header.css';
 import logoPath from '../../images/logo.svg';
 
 export default function Header(props) {
+    const location = useLocation();
+
     return(
-        <header class="header">
-            <div class="header__container"> 
-                <a class="header__logo-link" href="/">
-                    <img class="header__logo" src={logoPath} alt="Logotype" />
-                </a>
-                <div class="header__menu">
-                    <button class="header__button header__button_bg_transparent">Регистрация</button>
-                    <button class="header__button">Войти</button>
-                </div>
+        <header 
+            className={`header ${
+                location.pathname === "/" && "header_bg_blue"
+            }`}
+        >
+            <div 
+                className={
+                    `header__container ${
+                        (
+                            location.pathname === "/signin" || 
+                            location.pathname === "/signup"
+                        ) && "header__container_no-padding header__container_justify-content_center"
+                    }`
+                }
+            >
+                <Link className="header__logo-link" to="/">
+                    <img className="header__logo" src={logoPath} alt="Logotype" />
+                </Link>
+                <Menu />
             </div>
         </header>
     )

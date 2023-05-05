@@ -1,0 +1,132 @@
+.side-menu {
+    display: none;
+    z-index: 5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+.side-menu_active {
+    display: none;
+}
+
+.side-menu__container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 159px 0 92px;
+    max-width: 520px;
+    min-height: calc(100vh - 159px - 92px);
+    margin-left: auto;
+    background-color: rgba(32, 32, 32, 1);
+}
+
+.side-menu__container_opened {
+    animation-duration: .5s;
+    animation-name: slidein;
+}
+
+.side-menu__close-button {
+    position: absolute;
+    right: 27px;
+    top: 27px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    transform: rotate(45deg);
+    line-height: 0;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.side-menu__menu {
+    padding: 0 30px;
+    height: 100%;
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.side-menu__link {
+    padding-bottom: 4px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    text-decoration: none;
+}
+
+.side-menu__link_active {
+    box-shadow: inset 0 -2px #fff;
+}
+
+.side-menu__profile {
+    padding: 0 30px;
+}
+
+.side-menu__link-box {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-decoration: none;
+}
+
+.side-menu__link-box-text {
+    margin: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16px;
+}
+
+@keyframes slidein {
+    from {
+        right: -750px;
+    }
+
+    to {
+        right: 0;
+    }
+}
+
+@keyframes slideout {
+    from {
+        right: 0;
+    }
+
+    to {
+        right: -750px;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .side-menu_active {
+        display: block;
+    }
+}
+
+@media screen and (max-width: 481px) {
+    .side-menu__close-button {
+        right: 18px;
+        top: 18px;
+    }
+
+    .side-menu__container {
+        min-height: calc(100vh - 144px - 48px);
+        padding: 144px 0 48px;
+    }
+
+    .side-menu__menu {
+        gap: 18px;
+    }
+    
+    .side-menu__link {
+        padding-bottom: 6px;
+    }
+}

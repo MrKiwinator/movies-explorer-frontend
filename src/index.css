@@ -2,4 +2,9 @@
 @import url('./vendor/normalize.css');
 
 /* Fonts */
-@import url('./vendor/fonts/inter/inter.css')
+@import url('./vendor/fonts/inter/inter.css');
+
+/* Custom styles */
+html {
+    scroll-behavior: smooth;
+}

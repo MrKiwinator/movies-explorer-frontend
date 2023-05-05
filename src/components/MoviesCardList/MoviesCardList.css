@@ -1,0 +1,22 @@
+.cards__container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 81px 30px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    transition: all .3s;
+}
+
+@media screen and (max-width: 769px) {
+    .cards__container {
+        padding: 70px 30px 30px;
+    }
+}
+
+@media screen and (max-width: 481px) {
+    .cards__container {
+        padding: 50px 10px 30px;
+        gap: 20px;
+    }
+}

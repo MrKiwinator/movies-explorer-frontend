@@ -1,0 +1,185 @@
+.about-project {
+    background-color: rgba(32, 32, 32, 1);
+    color: rgba(255, 255, 255, 1);
+}
+
+.about-project__container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 110px 50px;
+    transition: all .3s;
+}
+
+.about-project__title {
+    margin: 0;
+    padding-bottom: 23px;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: -0.04em;
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+    transition: all .3s;
+}
+
+.about-project__list {
+    display: flex;
+    gap: 30px;
+    padding: 70px 0;
+    margin: 0;
+    list-style: none;
+    transition: all .3s;
+}
+
+.about-project__list-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 26px;
+    flex-flow: column nowrap;
+    max-width: 550px;
+    transition: all .3s;
+}
+
+.about-project__subtitle {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.04em;
+    transition: all .3s;
+}
+
+.about-project__text {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    transition: all .3s;
+}
+
+.progress-bar {
+    padding-top: 40px;
+    display: flex;
+    text-align: center;
+    transition: all .3s;
+}
+
+.progress-bar__item-left {
+    flex: 1 1 20%;
+    transition: all .3s;
+}
+
+.progress-bar__item-right {
+    flex: 1 1 80%;
+    transition: all .3s;
+}
+
+.progress-bar__text {
+    margin: 0 0 14px;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    background-color: rgba(48, 48, 48, 1);
+    transition: all .3s;
+}
+
+.progress-bar__text_bg_green {
+    background-color: rgba(61, 220, 132, 1);
+}
+
+.progress-bar__text_color_dark {
+    color: rgba(0, 0, 0, 1);
+}
+
+.progress-bar__description {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+    color: rgba(139, 139, 139, 1);
+    transition: all .3s;
+}
+
+@media screen and (max-width: 769px) {
+    .about-project__container {
+        padding: 90px 50px;
+    }
+
+    .about-project__list {
+        padding-bottom: 93px;
+    }
+
+    .about-project__list-item {
+        max-width: 319px;
+        gap: 22px;
+    }
+
+    .about-project__text {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .progress-bar {
+        padding-top: 0;
+    }
+
+    .progress-bar__item-left {
+        flex: 1 1 21%;
+    }
+    
+    .progress-bar__item-right {
+        flex: 1 1 79%;
+    }
+}
+
+@media screen and (max-width: 481px) {
+    .about-project__container {
+        padding: 70px 18px;
+    }
+
+    .about-project__title {
+        font-size: 18px;
+        line-height: 22px;
+        padding-bottom: 28px;
+    }
+
+    .about-project__list {
+        flex-direction: column;
+        padding: 60px 0;
+        gap: 56px;
+    }
+
+    .about-project__list-item {
+        gap: 16px;
+    }
+
+    .about-project__subtitle {
+        font-size: 18px;
+        line-height: 22px;
+    }
+
+    .about-project__text {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .progress-bar__text {
+        margin-bottom: 10px;
+        padding: 11px 10px;
+        font-size: 11px;
+        line-height: 13px;
+    }
+
+    .progress-bar__item-left {
+        flex: 1 1 35%;
+    }
+    
+    .progress-bar__item-right {
+        flex: 1 1 65%;
+    }
+
+    .progress-bar__description {
+        font-size: 11px;
+        line-height: 13px;
+    }
+}

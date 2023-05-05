@@ -1,0 +1,37 @@
+.form {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.form__title {
+    margin: 0;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 29px;
+}
+
+.form__form-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    gap: 40px;
+}
+
+.form__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+@media screen and (max-width: 481px) {
+    .form__title {
+        text-align: center;
+    }
+    
+    .form__form-container {
+        gap: 80px;
+    }
+}

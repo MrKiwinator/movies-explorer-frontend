@@ -1,0 +1,36 @@
+.cards__expand-button-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 50px 30px 80px;
+    text-align: center;
+}
+
+.cards__expand-button {
+    display: none;
+    min-width: 320px;
+    min-height: 36px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background-color: rgba(47, 47, 47, 1);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+.cards__expand-button_active  {
+    display: inline-block;
+}
+
+@media screen and (max-width: 481px) {
+    .cards__expand-button-container {
+        padding-top: 40px;
+    }
+
+    .cards__expand-button {
+        min-width: 240px;
+    }
+}
