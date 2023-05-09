@@ -76,6 +76,10 @@
     line-height: 17px;
 }
 
+.about-me__link:hover {
+    color: #4285F4;
+}
+
 .about-me__img {
     max-width: 270px;
     object-fit: fill;

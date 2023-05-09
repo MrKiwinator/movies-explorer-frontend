@@ -11,6 +11,11 @@
     font-size: 13px;
     line-height: 18px;
     text-decoration: none;
+    transition: all .3s;
+}
+
+.menu-movies__link:hover {
+    color: #4285F4;
 }
 
 .menu-movies__link_bold {
@@ -23,14 +28,20 @@
     gap: 13px;
     align-items: center;
     text-decoration: none;
+    color: #fff;
+    transition: all .3s;
+}
+
+.menu-movies__link-box:hover {
+    color: #4285F4;
 }
 
 .menu-movies__link-box-text {
     margin: 0;
-    color: #fff;
     font-size: 14px;
     line-height: 16px;
 }
+
 
 @media screen and (max-width: 768px) {
     .menu-movies {

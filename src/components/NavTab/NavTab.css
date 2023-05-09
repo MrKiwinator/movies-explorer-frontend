@@ -30,6 +30,11 @@
     transition: all .3s;
 }
 
+.nav__link:hover {
+    color: #4285F4;
+    border-color: #4285F4;
+}
+
 @media screen and (max-width: 481px) {
     .nav__list {
         gap: 24px;

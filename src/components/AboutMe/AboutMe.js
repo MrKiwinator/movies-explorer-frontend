@@ -17,11 +17,10 @@ export default function AboutMe(props) {
                             Фронтенд-разработчик, 29 лет
                         </h4>
                         <p className="about-me__text">
-                            Я родился и живу в Саратове, закончил факультет экономики СГУ. У меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь бегом. Недавно начал кодить.
-                            С 2015 года работал в компании «СКБ Контур». После того, как прошёл курс по веб-разработке, начал заниматься фриланс-заказами и ушёл с постоянной работы.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus efficitur iaculis massa, a ullamcorper erat imperdiet vel. Etiam viverra massa vel volutpat pretium. In convallis sodales pretium. Phasellus non rutrum ligula, ac blandit sapien. Phasellus venenatis dui sit amet ipsum malesuada, non elementum sapien mollis. Sed malesuada ullamcorper efficitur.
                         </p>
                         <div className="about-me__link-container">
-                            <a className="about-me__link" href="/">
+                            <a className="about-me__link" href="https://github.com/MrKiwinator">
                                 Github
                             </a>
                         </div>

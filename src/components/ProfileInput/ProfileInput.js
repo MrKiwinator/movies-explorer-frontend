@@ -1,19 +1,28 @@
+import React from "react";
+
 import "./ProfileInput.css";
 
 export default function ProfileInput(props) {
     return (
-        <div className="input-container">
-            <label className="input-container__input-label" for={props.type}>
+        <div className="profile__input-container">
+            <label className="profile__input-label" htmlFor={props.type}>
                 {props.label}
             </label>
             <input
                 id={`${props.type}-input`}
                 type={props.type}
                 name={props.type}
-                className={`input-container__input input_type_${props.type}`}
-                required />
-            {/* Text of an error for test only (TODO change after review) */}
-            <span className={`input-container__input-error user-${props.type}-input-error`}>Что-то пошло не так...</span>
+                disabled={props.disabled}
+                value={props.value}
+                onChange={props.handleChange}
+                className={
+                    `profile__input ${
+                        !props.disabled && "profile__input_active"
+                    } input_type_${props.type}`
+                }
+                placeholder={`Введите ${props.label.toLowerCase()}`}
+                required
+            />
         </div>
     )
 }

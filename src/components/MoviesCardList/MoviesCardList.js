@@ -8,9 +8,6 @@ export default function MoviesCardList(props) {
     return(
         <section className="cards">
             <div className="cards__container">
-                {
-                    React.Children.count
-                }
                 <MoviesCard />
                 <MoviesCard />
                 <MoviesCard />

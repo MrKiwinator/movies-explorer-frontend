@@ -1,6 +1,5 @@
 import Header from "../Header/Header";
-import Form from "../Form/Form";
-import AuthInput from "../AuthInput/AuthInput";
+import AuthForm from "../AuthForm/AuthForm";
 
 import "./Auth.css";
 
@@ -8,9 +7,8 @@ export default function Auth(props) {
     return(
         <div className="auth__container">
             <Header />
-            <Form
+            <AuthForm
                 greeting="Добро пожаловать!"
-                inputComponent={AuthInput}
                 inputsList={props.inputsList}
                 buttonText={props.buttonText}
                 altText={props.altText}

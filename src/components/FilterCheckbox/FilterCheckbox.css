@@ -46,7 +46,9 @@
 }
 
 .checkbox__label {
-    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     color: #fff;
     font-size: 12px;
     font-weight: 400;
@@ -54,9 +56,13 @@
     cursor: pointer;
 }
 
+.checkbox__label:hover {
+    color: #4285F4;
+}
+
 @media screen and (max-width: 481px) {
     .checkbox__label {
-        padding-left: 13px;
+        gap: 13px;
         font-size: 11px;
     }
 }

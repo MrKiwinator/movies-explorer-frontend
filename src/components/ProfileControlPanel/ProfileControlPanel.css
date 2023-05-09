@@ -1,0 +1,39 @@
+.profile__controls {
+    margin: auto auto 0;
+    max-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile__action-btn {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    cursor: pointer;
+}
+
+.profile__link {
+    color: #EE3465;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 481px) {
+    .profile__action-btn {
+        font-size: 12px;
+        line-height: 15px;
+    }
+    
+    .profile__link {
+        font-size: 12px;
+        line-height: 15px;
+    }
+}

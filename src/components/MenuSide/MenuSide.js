@@ -19,7 +19,9 @@ export default function MenuSide(props) {
 
     return(
         <div ref={overlay} onClick={handleOverlayClick} className={`side-menu ${props.isActive && "side-menu_active"}`}>
-            <div className={`side-menu__container ${props.isActive && "side-menu__container_opened"}`}>
+            <div className={`side-menu__container ${
+                props.isActive ? "side-menu__container_opened" : "side-menu__container_closed"
+            }`}>
                 <button
                     onClick={props.handleCloseSideMenu}
                     className="side-menu__close-button"
@@ -31,13 +33,15 @@ export default function MenuSide(props) {
                         Главная
                     </Link>
                     <Link 
-                        to="/movies" 
+                        to="/movies"
+                        onClick={props.handleCloseSideMenu} 
                         className={`side-menu__link ${location.pathname === "/movies" && "side-menu__link_active"}`}
                     >
                         Фильмы
                     </Link>
                     <Link 
-                        to="/saved-movies" 
+                        to="/saved-movies"
+                        onClick={props.handleCloseSideMenu} 
                         className={`side-menu__link ${location.pathname === "/saved-movies" && "side-menu__link_active"}`}
                     >
                         Сохраненные фильмы

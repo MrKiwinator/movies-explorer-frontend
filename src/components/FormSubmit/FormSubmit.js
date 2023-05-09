@@ -6,7 +6,17 @@ import "./FormSubmit.css";
 export default function FormSubmit(props) {
     return(
         <div className="form-submit">
-            <button type="submit" className="form-submit__submit-button">
+            {
+                props.errorMessage &&
+
+                <p class="form-submit__error-message">{props.errorMessage}</p>
+            }
+
+            <button 
+                type="submit"
+                className="form-submit__submit-button"
+                disabled={props.disabled}
+            >
                 {props.buttonText}
             </button>
 
@@ -23,7 +33,6 @@ export default function FormSubmit(props) {
                     </Link>
                 </p>
             }  
-
         </div>
     )
 }

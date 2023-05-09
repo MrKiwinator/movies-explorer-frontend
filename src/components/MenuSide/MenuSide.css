@@ -1,5 +1,6 @@
 .side-menu {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
     z-index: 5;
     position: fixed;
     top: 0;
@@ -7,10 +8,12 @@
     min-width: 100%;
     min-height: 100%;
     background-color: rgba(0, 0, 0, .3);
+    transition: all .5s;
 }
 
+/* To hide on wide screen after expansion from small to bigger one */
 .side-menu_active {
-    display: none;
+    visibility: hidden;
 }
 
 .side-menu__container {
@@ -29,6 +32,11 @@
 .side-menu__container_opened {
     animation-duration: .5s;
     animation-name: slidein;
+}
+
+.side-menu__container_closed {
+    animation-duration: .5s;
+    animation-name: slideout;
 }
 
 .side-menu__close-button {
@@ -107,7 +115,8 @@
 
 @media screen and (max-width: 769px) {
     .side-menu_active {
-        display: block;
+        visibility: visible;
+        opacity: 1;
     }
 }
 

@@ -14,13 +14,13 @@ export default function FilterCheckbox(props) {
             className="checkbox__container"
             onClick={handleChechboxChange}
         >
-            <input 
-                name="short"
-                id="short"
-                type="checkbox" 
-                className={`checkbox ${isActive && 'checkbox_is-active'}`}
-            />
-            <label for="short" className="checkbox__label">
+            <label className="checkbox__label">
+                <input 
+                    name="short"
+                    id="short"
+                    type="checkbox" 
+                    className={`checkbox ${isActive && 'checkbox_is-active'}`}
+                />
                 Короткометражки
             </label>
         </div>

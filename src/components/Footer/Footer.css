@@ -52,6 +52,10 @@
     transition: all .3s;
 }
 
+.footer__link:hover {
+    color: #4285F4;
+}
+
 @media screen and (max-width: 481px) {
     .footer__container {
         padding: 79px 10px 0; 
