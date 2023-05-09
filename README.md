@@ -1,5 +1,4 @@
-# react-mesto-api-full
-
+# movies-explorer-frontend
 Репозиторий для приложения проекта `Movies-Explorer`, включающий фронтенд часть приложения. 
 
 ## Ссылки на проект
