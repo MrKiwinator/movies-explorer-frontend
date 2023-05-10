@@ -6,10 +6,10 @@ import "./AuthForm.css";
 
 export default function AuthForm(props) {
     return(
-        <section className="auth">
-            <form className="auth__form-container">
+        <section className="auth-form">
+            <form className="auth-form__form-container">
 
-                <h3 className="auth__title">
+                <h3 className="auth-form__title">
                     {props.greeting}
                 </h3>
 

@@ -37,6 +37,10 @@
     line-height: 18px;
 }
 
+.search__input:focus {
+    background-color: rgb(97, 97, 97);
+}
+
 .search__input::placeholder {
     color: rgba(139, 139, 139, 1);
     font-size: 14px;

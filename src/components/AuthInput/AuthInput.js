@@ -10,7 +10,7 @@ export default function AuthInput(props) {
                 id={`${props.type}-input`}
                 type={props.type}
                 name={props.type}
-                className={`auth__input input_type_${props.type}`}
+                className={`auth__input input input_type_${props.type}`}
                 placeholder={`Введите ${props.label.toLowerCase()}`}
                 required />
             {/* Text of an error for test only (TODO change after review) */}

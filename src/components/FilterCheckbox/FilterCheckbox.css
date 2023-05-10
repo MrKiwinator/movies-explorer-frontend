@@ -1,17 +1,17 @@
-.checkbox__container {
+.checkbox {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.checkbox {
+.checkbox__switcher {
     position: relative;
     width: 36px;
     min-height: 20px;
     cursor: pointer;
 }
 
-.checkbox::after {
+.checkbox__switcher::after {
     content: '';
     z-index: 1;
     display: block;
@@ -22,7 +22,7 @@
     border-radius: 20px;
 }
 
-.checkbox::before {
+.checkbox__switcher::before {
     content: '';
     transform: translateY(-50%);
     top: 50%;
@@ -37,11 +37,11 @@
     transition: all .3s;
 }
 
-.checkbox:checked::after {
+.checkbox__switcher:checked::after {
     background: rgba(61, 220, 132, 1);
 }
 
-.checkbox:checked::before {
+.checkbox__switcher:checked::before {
     left: 22px;
 }
 

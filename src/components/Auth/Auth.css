@@ -1,5 +1,5 @@
 .auth__container {
-    min-height: calc(100vh - 140px);
+    min-height: 560px;
     padding: 70px 30px;
     max-width: 396px;
     margin: 0 auto;
@@ -7,18 +7,18 @@
     justify-content: flex-start;
     gap: 40px;
     flex-direction: column;
+    transition: all .3s;
 }
 
 @media screen and (max-width: 769px) {
     .auth__container {
-        min-height: calc(100vh - 464px);
         padding: 232px 30px;
     }
 }
 
 @media screen and (max-width: 481px) {
     .auth__container {
-        min-height: calc(100vh - 86px);
+        min-height: 692px;
         padding: 56px 30px 30px;
         gap: 50px;
     }

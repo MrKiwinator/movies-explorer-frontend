@@ -36,7 +36,7 @@ export default function MoviesCard(props) {
                     alt="Постер к фильму"
                 />
                 <img 
-                    className="card__img_big"
+                    className="card__img card__img_big"
                     // TODO: on next step change alt to flim title
                     src={filmPosterBig} 
                     alt="Постер к фильму"

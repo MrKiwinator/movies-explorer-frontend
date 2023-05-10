@@ -13,7 +13,7 @@ export default function Header(props) {
     return(
         <header 
             className={`header ${
-                location.pathname === "/" && "header_bg_blue"
+                location.pathname === "/" ? "header_bg_blue" : ""
             }`}
         >
             <div 
@@ -22,7 +22,7 @@ export default function Header(props) {
                         (
                             location.pathname === "/signin" || 
                             location.pathname === "/signup"
-                        ) && "header__container_no-padding header__container_justify-content_center"
+                        ) ? "header__container_no-padding header__container_justify-content_center" : ""
                     }`
                 }
             >

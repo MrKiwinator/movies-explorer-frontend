@@ -15,7 +15,7 @@ export default function Popup(props) {
         <div
             ref={overlay} 
             onClick={handleOverlayClick}
-            className={`popup ${props.isOpen && "popup_opened"}`}
+            className={`popup ${props.isOpen ? "popup_opened" : ""}`}
         >
             {props.children}
         </div>

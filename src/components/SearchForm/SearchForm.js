@@ -11,7 +11,7 @@ export default function SearchForm(props) {
                     <fieldset className="search__input-fields">
 
                         <div className="search__input-container">
-                            <input name="movie" type="text" className="search__input" placeholder="Фильм" />
+                            <input name="movie" type="text" className="search__input" placeholder="Фильм" required />
                             <button className="search__submit-button">
                                 <img className="search__submit-icon" src={searchIcon} alt="Поиск" />
                             </button>

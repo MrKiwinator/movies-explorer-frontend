@@ -11,7 +11,7 @@ export default function FilterCheckbox(props) {
 
     return(
         <div 
-            className="checkbox__container"
+            className="checkbox"
             onClick={handleChechboxChange}
         >
             <label className="checkbox__label">
@@ -19,7 +19,7 @@ export default function FilterCheckbox(props) {
                     name="short"
                     id="short"
                     type="checkbox" 
-                    className={`checkbox ${isActive && 'checkbox_is-active'}`}
+                    className={`checkbox__switcher ${isActive && 'checkbox__switcher_is-active'}`}
                 />
                 Короткометражки
             </label>

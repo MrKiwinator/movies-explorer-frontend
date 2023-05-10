@@ -1,11 +1,11 @@
-.auth {
+.auth-form {
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
     gap: 40px;
 }
 
-.auth__title {
+.auth-form__title {
     margin: 0;
     color: #fff;
     font-size: 24px;
@@ -13,7 +13,7 @@
     line-height: 29px;
 }
 
-.auth__form-container {
+.auth-form__form-container {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
@@ -21,11 +21,11 @@
 }
 
 @media screen and (max-width: 481px) {
-    .auth__title {
+    .auth-form__title {
         text-align: center;
     }
     
-    .auth__form-container {
+    .auth-form__form-container {
         gap: 80px;
     }
 }

@@ -7,15 +7,29 @@ import './MoviesCardList.css';
 export default function MoviesCardList(props) {
     return(
         <section className="cards">
-            <div className="cards__container">
-                <MoviesCard />
-                <MoviesCard />
-                <MoviesCard />
-                <MoviesCard />
-                <MoviesCard />
-                <MoviesCard />
-                <MoviesCard />
-            </div>
+            <ul className="cards__list">
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+                <li className="cards__list-item">
+                    <MoviesCard />
+                </li>
+            </ul>
             <MoviesExpandButton />
         </section>
     )

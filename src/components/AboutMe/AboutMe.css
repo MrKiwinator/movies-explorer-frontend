@@ -115,24 +115,16 @@
 }
 
 @media screen and (max-width: 546px) {
+    .about-me__container {
+        padding: 70px 14px;
+    }
+
     .about-me__content {
         flex-direction: column;
         padding-top: 60px;
         gap: 40px;
     }
-}
 
-@media screen and (max-width: 481px) {
-    .about-me__container {
-        padding: 70px 14px;
-    }
-
-    .about-me__title {
-        padding-bottom: 28px;
-        font-size: 18px;
-        line-height: 22px;
-    }
-    
     .about-me__img {
         order: 1;
         max-width: 292px;
@@ -140,6 +132,12 @@
 
     .about-me__info {
         order: 2;
+    }
+
+    .about-me__title {
+        padding-bottom: 28px;
+        font-size: 18px;
+        line-height: 22px;
     }
 
     .about-me__subtitle {

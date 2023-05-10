@@ -16,8 +16,8 @@ export default function ProfileInput(props) {
                 value={props.value}
                 onChange={props.handleChange}
                 className={
-                    `profile__input ${
-                        !props.disabled && "profile__input_active"
+                    `profile__input input ${
+                        !props.disabled ? "profile__input_active" : ""
                     } input_type_${props.type}`
                 }
                 placeholder={`Введите ${props.label.toLowerCase()}`}
