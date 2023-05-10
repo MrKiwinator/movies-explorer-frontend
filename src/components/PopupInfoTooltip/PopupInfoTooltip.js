@@ -7,7 +7,7 @@ import failIcon from "../../images/fail-icon.svg";
 export default function PopupInfoTooltip(props) {
     return (
         <Popup isOpen={props.isOpen} onClose={props.onClose}>
-            <div className={`info-tooltip ${props.isOpen && "info-tooltip_opened" }`}>
+            <div className={`info-tooltip ${props.isOpen ? "info-tooltip_opened" : ""}`}>
                 {
                     props.tooltipStatus === "success" ?
                     <>
