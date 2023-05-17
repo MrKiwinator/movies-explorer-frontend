@@ -1,0 +1,13 @@
+/* FOR AUTH BLOCK */
+.auth__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+/* FOR PROFILE BLOCK */
+
+.profile__inputs {
+    display: flex;
+    flex-direction: column;
+}

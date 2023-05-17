@@ -1,0 +1,22 @@
+.side-menu-button {
+    padding: 0;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 7px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 769px) {
+    .side-menu-button {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 481px) {
+    .side-menu-button__img {
+        max-width: 40px;
+        max-height: 43px;
+    }
+}

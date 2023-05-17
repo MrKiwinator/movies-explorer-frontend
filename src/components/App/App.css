@@ -1,0 +1,5 @@
+.app {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+    background-color: rgba(32, 32, 32, 1);
+}

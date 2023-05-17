@@ -1,0 +1,55 @@
+.header_bg_blue {
+    background-color: rgba(7, 48, 66, 1);
+}
+
+.header__container {
+    max-width: 1140px;
+    max-height: 38px;
+    padding: 18px 30px; 
+    margin: 0 auto;
+    display: flex;
+    gap: 44px;
+    justify-content: space-between;
+    align-items: center;
+    transition: all .3s;
+}
+
+.header__container_no-padding {
+    padding: 0;
+}
+
+.header__logo-link {
+    max-height: 38px;
+}
+
+@media screen and (max-width: 769px) {
+    .header__link {
+        padding: 8px 20px;
+        border: none;
+        box-shadow: none;
+    }
+}
+
+@media screen and (max-width: 481px) {
+    .header__container {
+        padding: 18px 14px; 
+        gap: 20px;
+    }
+
+    .header__container_no-padding {
+        padding: 0;
+    }
+
+    .header__container_justify-content_center {
+        justify-content: center;
+    }
+    
+    .header__menu {
+        gap: 2px;
+    }
+    
+    .header__link {
+        padding: 5px 12px;
+        font-size: 10px;
+    }
+}
