@@ -9,7 +9,7 @@ export default function FormSubmit(props) {
             {
                 props.errorMessage &&
 
-                <p class="form-submit__error-message">{props.errorMessage}</p>
+                <p className="form-submit__error-message">{props.errorMessage}</p>
             }
 
             <button 

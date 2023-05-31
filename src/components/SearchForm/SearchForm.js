@@ -7,17 +7,32 @@ export default function SearchForm(props) {
         <section className="search">
             <div className="search__container">
 
-                <form className="search__form">
+                <form className="search__form" onSubmit={props.handleSubmitClick}>
                     <fieldset className="search__input-fields">
 
                         <div className="search__input-container">
-                            <input name="movie" type="text" className="search__input" placeholder="Фильм" required />
-                            <button className="search__submit-button">
+                            <input
+                                onChange={props.handleSearchInputChange}
+                                value={props.value}
+                                name="movie"
+                                type="text"
+                                className="search__input"
+                                placeholder="Фильм"
+                                // required
+                            />
+                            <button 
+                                className="search__submit-button"
+                                type="submit"
+                            >
                                 <img className="search__submit-icon" src={searchIcon} alt="Поиск" />
                             </button>
                         </div>
 
-                        <FilterCheckbox />
+                        <FilterCheckbox 
+                            onChange={props.onChechboxChange}
+                            value={props.fiterIsActive}
+                            label="Короткометражки"
+                        />
 
                     </fieldset>
                 </form>

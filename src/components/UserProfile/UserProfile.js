@@ -5,47 +5,55 @@ import FormSubmit from "../FormSubmit/FormSubmit";
 import Inputs from "../Inputs/Inputs";
 import ProfileInput from "../ProfileInput/ProfileInput";
 
+import { useFormWithValidation } from "../FromValidator/FormValidator";
+
 import "./UserProfile.css";
 
 export default function UserProfile(props) {
+    const { 
+        values,
+        setValues,
+        errors, 
+        handleChange, 
+        isValid,
+    } = useFormWithValidation();
+
     const [editProfileIsActive, setEditProfileIsActive] = React.useState(false);
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
+
+    // Hook to set initial user info:
+    // ===================================
+    React.useEffect(() => {
+        setValues(props.currentUser);
+    }, [props.currentUser, setValues])
+    // ===================================
+
+    // Hooks for checking if submit button need to be active and set error messages:
+    // ===================================
     const [submitDisabled, setSubmitDisabled] = React.useState(true);
+    const [errorMessage, setErrorMessage] = React.useState("")
 
     React.useEffect(() => {
-        setName(props.currentUser.name);
-        setEmail(props.currentUser.email);
-    }, [props.currentUser])
+        if (JSON.stringify(values) === JSON.stringify(props.currentUser)) {
+            setSubmitDisabled(true);
+            setErrorMessage("Измените данные пользователя");
+            return;
+        }
+        else if (!isValid) {
+            setSubmitDisabled(true);
+            setErrorMessage("Пожалуйста, проверьте правильность ввода данных");
+            return;
+        }
+        setSubmitDisabled(false);
+    }, [props.currentUser, values, submitDisabled, isValid])
+    // ===================================
 
     function handleEditProfileClick() {
         setEditProfileIsActive(true);
     }
 
-    function handleSubmitBtnState(e) {
-        if (e.target.value === props.currentUser.name || e.target.value === props.currentUser.email) {
-            setSubmitDisabled(true);
-        } else {
-            setSubmitDisabled(false);
-        }
-        
-    }
-
-    function handleNameChange(e) {
-        setName(e.target.value);
-        handleSubmitBtnState(e);
-    }
-
-    function handleEmailChange(e) {
-        setEmail(e.target.value);
-        handleSubmitBtnState(e);
-    }
-
     function handleSubmit(e) {
         e.preventDefault();
-
-        console.log(name)
-        props.onUserUpdate({name, email})
+        props.onUserUpdate(values)
         setEditProfileIsActive(false);
         setSubmitDisabled(true);
         props.openPopup();
@@ -67,16 +75,15 @@ export default function UserProfile(props) {
                         {
                             label: "Имя",
                             type: "name",
-                            value: name,
-                            handleChange: handleNameChange,
                         },
                         {
                             label: "E-mail",
                             type: "email",
-                            value: email,
-                            handleChange: handleEmailChange,
                         },
                     ]}
+                    handleChange={handleChange}
+                    errors={errors}
+                    values={values}
                 />
 
                 {
@@ -90,8 +97,8 @@ export default function UserProfile(props) {
                         altLinkText={props.altLinkText}
                         disabled={submitDisabled}
                         // Uncomment to check error message:
-                        // errorMessage={"При обновлении профиля произошла ошибка."}
-                    /> 
+                        errorMessage={errorMessage}
+                    />
                     :
                     <ProfileControlPanel handleEditProfile={handleEditProfileClick}/>
                 }

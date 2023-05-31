@@ -32,7 +32,6 @@
 }
 
 .auth__input-error {
-    display: none;
     position: absolute;
     left: 0;
     bottom: -16px;

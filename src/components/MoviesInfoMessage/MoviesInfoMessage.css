@@ -1,0 +1,14 @@
+.message {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 81px 30px 10px;
+}
+
+.message__text {
+    margin: 0;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}

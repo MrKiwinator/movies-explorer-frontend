@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import './App.css';
 import Header from '../Header/Header';
@@ -12,16 +12,33 @@ import UserRegister from '../UserRegister/UserRegister';
 import UserProfile from '../UserProfile/UserProfile';
 import PopupInfoTooltip from '../PopupInfoTooltip/PopupInfoTooltip';
 
-function App() {
-    const [loggedIn, setLoggedIn] = React.useState(false);
+import auth from "../../utils/auth";
 
+function App() {
+
+    // ======= Hook for navigation: =======
+    const navigate = useNavigate();
+    
     const [popupIsOpen, setPopupIsOpen] = React.useState(false);
 
-    // TODO: Remove hardcode after level-2
-    const [currentUser, setCurrentUser] = React.useState({
-        name: "Виталий",
-        email: "pochta@yandex.ru",
+    // TODO: Remove after all good
+    const [currentUser, setCurrentUser] = React.useState({name: "asd", email: "asd@asd.asd"})
+
+    // ======= Registration hooks: =======
+
+    const [formRegValue, setFormRegValue] = React.useState({
+        email: '',
+        password: '',
     })
+
+    // ======= Login hooks: =======
+
+    const [formLoginValue, setFormLoginValue] = React.useState({
+        email: '',
+        password: '',
+    })
+
+    const [loggedIn, setLoggedIn] = React.useState(false);
 
     function handleUserUpdate(userInfo) {
         setCurrentUser(userInfo);
