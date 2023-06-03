@@ -24,21 +24,11 @@ function App() {
     // TODO: Remove after all good
     const [currentUser, setCurrentUser] = React.useState({name: "asd", email: "asd@asd.asd"})
 
-    // ======= Registration hooks: =======
-
-    const [formRegValue, setFormRegValue] = React.useState({
-        email: '',
-        password: '',
-    })
-
-    // ======= Login hooks: =======
-
-    const [formLoginValue, setFormLoginValue] = React.useState({
-        email: '',
-        password: '',
-    })
-
     const [loggedIn, setLoggedIn] = React.useState(false);
+
+    function handleUserLogin() {
+        setLoggedIn(true);
+    }
 
     function handleUserUpdate(userInfo) {
         setCurrentUser(userInfo);
@@ -73,7 +63,9 @@ function App() {
                     path="/signin"
                     element={
                         <>
-                            <UserLogin />
+                            <UserLogin 
+                                handleUserLogin={handleUserLogin}
+                            />
                         </>
                     }
                 />

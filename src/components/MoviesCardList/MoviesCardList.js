@@ -27,7 +27,6 @@ export default function MoviesCardList(props) {
                         onClick={props.handleClick}
                     />
             }
-            
         </section>
     )
 }

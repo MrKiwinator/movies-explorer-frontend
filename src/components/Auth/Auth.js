@@ -13,6 +13,7 @@ export default function Auth(props) {
                 <Header />
                 <AuthForm
                     handleSubmitClick={props.handleSubmitClick}
+                    handleUserLogin={props.handleUserLogin}
                     greeting={props.greeting}
                     inputsList={props.inputsList}
                     buttonText={props.buttonText}

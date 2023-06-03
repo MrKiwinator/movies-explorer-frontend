@@ -7,94 +7,171 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
 
 import moviesApi from '../../utils/moviesApi';
+import mainApi from '../../utils/mainApi'
 
 import './Movies.css';
 
 export default function Movies(props) {
-    const [movies, setMovies] = React.useState([]);
+    // Global filter is in response on choosing which obj property to use "all" or "saved":
+    const [globalMoviesFilter, setGlobalMoviesFilter] = React.useState("all");
 
-    // Hooks for external database:
-    const [filteredMovies, setFilteredMovies] = React.useState([]);
-    const [movieToFind, setMovieToFind] = React.useState("");
-    const [shortFilterIsActive, setShortFilterIsActive] = React.useState(false);
+    // TODO: try to rename to "moviesList" mb
+    const [movies, setMovies] = React.useState({
+        all: [],
+        saved: [],
+    });
+    const [filteredMovies, setFilteredMovies] = React.useState({
+        all: [],
+        saved: [],
+    });
+    const [movieToFind, setMovieToFind] = React.useState({
+        all: "",
+        saved: "",
+    });
+    const [shortFilterIsActive, setShortFilterIsActive] = React.useState({
+        all: false,
+        saved: false,
+    });
 
-    // Hooks for site database:
-    const [filteredSavedMovies, setFilteredSavedMovies] = React.useState([]);
-    const [savedMovieToFind, setSavedMovieToFind] = React.useState("");
-    const [savedShortFilterIsActive, setSavedShortFilterIsActive] = React.useState(false);
-
-    const [infoMessage, setInfoMessage] = React.useState("");
-    const [showPreloader, setShowPreloader] = React.useState(false);
+    const [infoMessage, setInfoMessage] = React.useState({
+        all: "",
+        saved: "",
+    });
+    const [showPreloader, setShowPreloader] = React.useState({
+        all: true,
+        saved: true,
+    });
 
     const location = useLocation();
 
-    // Reset filters on path change
+    // Change global filter on path change
     React.useEffect(() => {
-        if (location.pathname === "/saved-movies") {
-            setMovieToFind("");
-            setShortFilterIsActive(false);
-            setMoviesToShow(moviesPerPage);
-            setFilteredMovies([]);
+        if (location.pathname === "/movies") {
+            setGlobalMoviesFilter("all");
+        } else if (location.pathname === "/saved-movies") {
+            setGlobalMoviesFilter("saved");
         }
-        // setMovieToFind("");
-        // setShortFilterIsActive(false);
-        // setMoviesToShow(moviesPerPage);
-        // setFilteredMovies([]);
     }, [location])
 
-    // Get movies on page loading
     React.useEffect(() => {
-        setShowPreloader(true);
+        // Set movies.all if its exist in local storage:
+        if (localStorage.movies & localStorage.movies !== []) {
+            console.log("Getting movies from local storage")
+            return setMovies(prevState => {
+                return {...prevState, all: JSON.parse(localStorage.getItem("movies"))}
+            });
+        }
 
+        // Get movies from extenal db on first page loading:
         moviesApi.getMovies()   
-            .then((movies) => {
-                setMovies(movies);
-                setInfoMessage("Пришло время найти фильм!");
+            .then((res) => {
+                console.log("Getting movies from external db");
+                setMovies(prevState => {
+                    return {...prevState, all: res};
+                })
+                setInfoMessage(prevState => {
+                    return {...prevState, all: "Пришло время найти фильм!"}
+                })
+                // Saving movies.all in local storage:
+                localStorage.setItem('allMovies', JSON.stringify(movies));
             })
             .catch((err) => {
-                setInfoMessage("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.");
+                setInfoMessage(prevState => {
+                    return {...prevState, all: "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз."}
+                });
                 console.log(err);
             })
             .finally(() => {
-                setShowPreloader(false);
+                setShowPreloader(prevState => {
+                    return {...prevState, all: false}
+                });
             })
     }, [])
 
-    // Search movie:
+    // Get movies from internal db on page loading
+    React.useEffect(() => {
+        // Set movies.all if its exist in local storage:
+        if (localStorage.movies & localStorage.movies !== []) {
+            console.log("Getting movies from local storage")
+            return setMovies(prevState => {
+                return {...prevState, all: JSON.parse(localStorage.getItem("movies"))}
+            });
+        }
+
+        mainApi.getMovies()
+            .then((res) => {
+                setMovies(prevState => {
+                    return {...prevState, saved: res};
+                })
+                setInfoMessage(prevState => {
+                    if (res.length !== 0) {
+                        return {...prevState, saved: "Пришло время найти фильм!"}
+                    }
+                    return {...prevState, saved: "У вас нет сохраненных фильмов!"}
+                })
+            })
+            .catch((err) => {
+                setInfoMessage(prevState => {
+                    return {...prevState, saved: "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз."}
+                });
+                console.log(err);
+            })
+            .finally(() => {
+                setShowPreloader(prevState => {
+                    return {...prevState, saved: false}
+                });
+            })
+    }, [])
+
+    // TODO: Rename function
+    // Multipurpose function allows to set state in depense of current path:
+    function handlePath(state, setState, value) {
+        if (location.pathname === "/movies") {
+            return setState({...state, all: value});
+        }
+        setState({...state, saved: value})
+    }
+
+    // Search movies:
     // ===========================================
     function handleSearchInputChange(e) {
-        setMovieToFind(e.target.value);
+        handlePath(movieToFind, setMovieToFind, e.target.value);
+        console.log(movieToFind);
+        console.log(infoMessage);
+        console.log(movies);
     }
 
     function searchMovie(movie) {
-        if (shortFilterIsActive) {
+        if (shortFilterIsActive[globalMoviesFilter]) {
             if (movie.duration <= 40) {
-                return movie.nameRU.toLowerCase().includes(movieToFind.toLowerCase());
+                return movie.nameRU.toLowerCase().includes(movieToFind[globalMoviesFilter].toLowerCase());
             }
         } else {
-            return movie.nameRU.toLowerCase().includes(movieToFind.toLowerCase())
+            return movie.nameRU.toLowerCase().includes(movieToFind[globalMoviesFilter].toLowerCase());
         }
     }
 
     function handleSearchBtnClick(e) {
         e.preventDefault();
         
-        const filteredMoviesArr = movies.filter(movie => searchMovie(movie));
+        const filteredMoviesArr = movies[globalMoviesFilter].filter((movie) => {
+            return searchMovie(movie)
+        });
 
         console.log(filteredMoviesArr);
 
         if (filteredMoviesArr.length === 0) {
-            setFilteredMovies([])
-            setInfoMessage("Упс! Кажется, такого фильма нет в нашей коллекции...");
+            handlePath(filteredMovies, setFilteredMovies, [])
+            handlePath(infoMessage, setInfoMessage, "Упс! Кажется, такого фильма нет в нашей коллекции...");
             return;
         }
-        setFilteredMovies(filteredMoviesArr);
+        handlePath(filteredMovies, setFilteredMovies, filteredMoviesArr)
 
         setMoviesToShow(moviesPerPage);
     }
 
     function handleCheckboxChange() {
-        setShortFilterIsActive(!shortFilterIsActive);
+        handlePath(shortFilterIsActive, setShortFilterIsActive, !shortFilterIsActive[globalMoviesFilter]);
     }
     // ===========================================
 
@@ -104,36 +181,39 @@ export default function Movies(props) {
     const [moviesToShow, setMoviesToShow] = React.useState(moviesPerPage);
 
     function getMoviesList() {
-        return filteredMovies.slice(0, moviesToShow);
+        console.log(filteredMovies[globalMoviesFilter]);
+        return filteredMovies[globalMoviesFilter].slice(0, moviesToShow);
     }
 
     function handleExpandBtnClick() {
         setMoviesToShow(moviesToShow + 7);
     }
+
     // ===========================================
 
     return(
         <main className="movies">
             <SearchForm
-                value={movieToFind}
+                value={movieToFind[globalMoviesFilter]}
                 handleSearchInputChange={handleSearchInputChange}
                 handleSubmitClick={handleSearchBtnClick}
                 onChechboxChange={handleCheckboxChange}
-                fiterIsActive={shortFilterIsActive}
+                fiterIsActive={shortFilterIsActive[globalMoviesFilter]}
             />
+            
             {
-                showPreloader ? 
+                showPreloader[globalMoviesFilter] ? 
                     <Preloader /> 
                     : 
-                    filteredMovies.length === 0 ?
+                    filteredMovies[globalMoviesFilter].length === 0 ?
                         <MoviesInfoMessage 
-                            message={infoMessage}
+                            message={infoMessage[globalMoviesFilter]}
                         />
                         :
                         <MoviesCardList 
                             moviesList={getMoviesList}
                             handleClick={handleExpandBtnClick}
-                            showExpandBtn={moviesToShow <= filteredMovies.length}
+                            showExpandBtn={moviesToShow <= filteredMovies[globalMoviesFilter].length}
                         />
             }
         </main>

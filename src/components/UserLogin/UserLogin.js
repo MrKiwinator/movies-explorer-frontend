@@ -15,6 +15,7 @@ export default function UserLogin(props) {
                     type: "password",
                 }
             ]}
+            handleUserLogin={props.handleUserLogin}
             greeting="Рады видеть!"
             buttonText="Войти"
             altText="Ещё не зарегистрированы?"

@@ -35,7 +35,7 @@ class Api {
     }
 
     getMovies() {
-        return fetch(this._url, {
+        return fetch(`${this._url}/movies`, {
             method: "GET",
             credentials: this._credentials,
             headers: this._headers,
