@@ -5,6 +5,7 @@ export function useFormWithValidation() {
         name: "",
         email: "",
         password: "",
+        movie: "",
     });
     const [errors, setErrors] = React.useState({});
     const [isValid, setIsValid] = React.useState(false);

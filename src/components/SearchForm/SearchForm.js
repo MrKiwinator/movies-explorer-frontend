@@ -1,8 +1,10 @@
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+
 import './SearchForm.css';
 import searchIcon from '../../images/search.svg'
 
 export default function SearchForm(props) {
+
     return(
         <section className="search">
             <div className="search__container">

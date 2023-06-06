@@ -23,6 +23,11 @@ export default function UserRegister(props) {
                     type: "password",
                 },
             ]}
+            handleSubmitClick={props.handleSubmitClick}
+            handleChange={props.handleChange}
+            values={props.values}
+            errors={props.errors}
+            isValid={props.isValid}
             greeting="Добро пожаловать!"
             buttonText="Зарегестрироваться"
             altText="Уже зарегистрированы?"

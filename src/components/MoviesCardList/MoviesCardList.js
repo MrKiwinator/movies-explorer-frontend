@@ -1,21 +1,35 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 import MoviesCard from '../MoviesCard/MoviesCard';
 import MoviesExpandButton from '../MoviesExpandButton/MoviesExpandButton';
 import './MoviesCardList.css';
 
 export default function MoviesCardList(props) {
+    const location = useLocation();
+
     return(
         <section className="cards">
             <ul className="cards__list">
                 {
-                    props.moviesList().map(movie => {
+                    props.moviesList.map(movie => {
+
+                        const isSaved = props.savedMovies.some(savedMovie => savedMovie.movieId === movie.id)
+
                         return(
                             <li
-                                key={movie.id}
+                                key={
+                                    location.pathname === "/movies" ? movie.id : movie._id
+                                }
                                 className="cards__list-item"
                             >
-                                <MoviesCard movie={movie} />
+                                <MoviesCard 
+                                    movie={movie}
+                                    savedMovies={props.savedMovies}
+                                    onMovieSave={props.onMovieSave}
+                                    onMovieDelete={props.onMovieDelete}
+                                    isSaved={isSaved}
+                                />
                             </li>
                         )
                     })
@@ -24,7 +38,7 @@ export default function MoviesCardList(props) {
             {
                 (props.showExpandBtn) &&
                     <MoviesExpandButton 
-                        onClick={props.handleClick}
+                        onClick={props.handleExpandBtnClick}
                     />
             }
         </section>

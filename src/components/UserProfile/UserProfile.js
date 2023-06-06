@@ -5,7 +5,7 @@ import FormSubmit from "../FormSubmit/FormSubmit";
 import Inputs from "../Inputs/Inputs";
 import ProfileInput from "../ProfileInput/ProfileInput";
 
-import { useFormWithValidation } from "../FromValidator/FormValidator";
+import { useFormWithValidation } from "../../utils/customHooks/useFormValidator";
 
 import "./UserProfile.css";
 
@@ -44,6 +44,7 @@ export default function UserProfile(props) {
             return;
         }
         setSubmitDisabled(false);
+        setErrorMessage("");
     }, [props.currentUser, values, submitDisabled, isValid])
     // ===================================
 

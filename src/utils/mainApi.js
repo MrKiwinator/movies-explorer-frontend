@@ -12,6 +12,15 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
+    getMovies() {
+        return fetch(`${this._url}/movies`, {
+            method: "GET",
+            credentials: this._credentials,
+            headers: this._headers,
+        })
+            .then(this._checkResponse)
+    }
+
     saveMovie(movie) {
         return fetch(`${this._url}/movies`, {
             method: "POST",
@@ -34,11 +43,11 @@ class Api {
             .then(this._checkResponse)
     }
 
-    getMovies() {
-        return fetch(`${this._url}/movies`, {
-            method: "GET",
+    deleteMovie(movieId) {
+        return fetch (`${this._url}/movies/${movieId}`, {
+            method: "DELETE",
             credentials: this._credentials,
-            headers: this._headers,
+            headers: this._headers
         })
             .then(this._checkResponse)
     }
