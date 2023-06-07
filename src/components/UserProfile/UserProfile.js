@@ -33,6 +33,8 @@ export default function UserProfile(props) {
                                 {
                                     label: "Имя",
                                     type: "name",
+                                    minLength: "2",
+                                    maxLength: "30",
                                 },
                                 {
                                     label: "E-mail",

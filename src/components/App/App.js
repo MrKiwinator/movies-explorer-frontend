@@ -52,10 +52,9 @@ function App() {
 
     const [loginSubmitBtnDisabled, setLoginSubmitBtnDisabled] = React.useState(false);
     const [registerSubmitBtnDisabled, setRegisterSubmitBtnDisabled] = React.useState(false);
-    const [userUpdateSubmitDisabled, setUserUpdateSubmitDisabled] = React.useState(true);
+    const [userUpdateSubmitBtnDisabled, setUserUpdateSubmitBtnDisabled] = React.useState(true);
 
     const [editProfileIsActive, setEditProfileIsActive] = React.useState(false);
-    const [updateUserSubmitBtnDisabled, setUpdateUserSubmitBtnDisabled] = React.useState(false);
 
     const [userUpdateErrorMessage, setUserUpdateErrorMessage] = React.useState("")
     // =================================================
@@ -76,11 +75,16 @@ function App() {
             navigate(location.pathname, {replace: true})
         }
         
-        // if user loggedIn send reqest on server to get required data:
+        // if user loggedIn send request on server to get required data:
         if (loggedIn) {
             mainApi.getUserInfo()
                 .then((userData) => {
                     setCurrentUser(userData);
+                })
+                .catch(() => {
+                    setLoggedIn(false);
+                    navigate("/signin", { replace: true })
+                    localStorage.clear()
                 })
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +94,7 @@ function App() {
     React.useEffect(() => {
         setLoginSubmitBtnDisabled(!isValid);
         setRegisterSubmitBtnDisabled(!isValid);
-        setUserUpdateSubmitDisabled(!isValid);
+        setUserUpdateSubmitBtnDisabled(!isValid);
     }, [isValid])
 
     // Set initial input state as current user data on user update:
@@ -103,17 +107,18 @@ function App() {
     // Handle error message on user update:
     React.useEffect(() => {
         if (values.name === currentUser.name & values.email === currentUser.email) {
-            setUserUpdateSubmitDisabled(true);
+            setUserUpdateSubmitBtnDisabled(true);
             setUserUpdateErrorMessage("Измените данные пользователя");
             return;
         }
         else if (!isValid) {
-            setUserUpdateSubmitDisabled(true);
+            setUserUpdateSubmitBtnDisabled(true);
             setUserUpdateErrorMessage("Пожалуйста, проверьте правильность ввода данных");
             return;
         }
-        setUserUpdateSubmitDisabled(false);
+        setUserUpdateSubmitBtnDisabled(false);
         setUserUpdateErrorMessage("");
+
     }, [currentUser, values, isValid])
     // =================================================
 
@@ -207,7 +212,12 @@ function App() {
 
         const { name, email } = values;
 
-        setUpdateUserSubmitBtnDisabled(true);
+        // To don't let to send request in input values equal to current user data:
+        if (name === currentUser.name & email === currentUser.email) {
+            return;
+        }
+
+        setUserUpdateSubmitBtnDisabled(true);
 
         setShowPreloader(true);
 
@@ -228,7 +238,7 @@ function App() {
                 setPopupIsOpen(true);
             })
             .finally(() => {
-                setUpdateUserSubmitBtnDisabled(false);
+                setUserUpdateSubmitBtnDisabled(false);
                 setShowPreloader(false);
             })
     }
@@ -277,7 +287,10 @@ function App() {
                     <Route
                         path="/signup"
                         element={
-                            <UserRegister 
+                            <ProtectedRoute 
+                                element={UserRegister}
+                                loggedIn={!loggedIn}
+                                path={"/movies"}
                                 showPreloader={showPreloader}
                                 handleSubmitClick={handleRegistrationSubmit}
                                 submitBtnDisabled={registerSubmitBtnDisabled}
@@ -292,7 +305,10 @@ function App() {
                     <Route
                         path="/signin"
                         element={
-                            <UserLogin 
+                            <ProtectedRoute 
+                                element={UserLogin}
+                                loggedIn={!loggedIn}
+                                path={"/movies"}
                                 showPreloader={showPreloader}
                                 handleSubmitClick={handleLoginSubmit}
                                 submitBtnDisabled={loginSubmitBtnDisabled}
@@ -326,6 +342,7 @@ function App() {
                             <ProtectedRoute 
                                 element={MoviesAll}
                                 loggedIn={loggedIn}
+                                path={"/signin"}
                             />
                         }
                     />
@@ -336,6 +353,7 @@ function App() {
                             <ProtectedRoute 
                                 element={MoviesSaved}
                                 loggedIn={loggedIn}
+                                path={"/signin"}
                             />
                             
                         }
@@ -347,17 +365,17 @@ function App() {
                             <ProtectedRoute 
                                 element={UserProfile}
                                 loggedIn={loggedIn}
+                                path={"/signin"}
                                 editProfileIsActive={editProfileIsActive}
                                 handleEditProfileClick={handleEditProfileClick}
                                 handleSubmitClick={handleUserUpdateSubmit}
-                                submitBtnDisabled={updateUserSubmitBtnDisabled}
                                 handleChange={handleChange}
                                 values={values}
                                 isValid={isValid}
                                 userName={currentUser.name}
                                 hanldeLogout={handleUserLogout}
                                 openPopup={openPopup}
-                                submitDisabled={userUpdateSubmitDisabled}
+                                submitBtnDisabled={userUpdateSubmitBtnDisabled}
                                 errorMessage={userUpdateErrorMessage}
                                 showPreloader={showPreloader}
                             />

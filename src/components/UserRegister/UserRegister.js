@@ -1,7 +1,5 @@
 import Auth from "../Auth/Auth";
 
-// import auth from "../../utils/auth";
-
 import "./UserRegister.css";
 
 export default function UserRegister(props) {
@@ -12,7 +10,8 @@ export default function UserRegister(props) {
                 {
                     label: "Имя",
                     type: "name",
-                    // errorMessage: {}
+                    minLength: "2",
+                    maxLength: "30",
                 },
                 {
                     label: "E-mail",
@@ -31,7 +30,7 @@ export default function UserRegister(props) {
             errors={props.errors}
             isValid={props.isValid}
             greeting="Добро пожаловать!"
-            buttonText="Зарегестрироваться"
+            buttonText="Зарегистрироваться"
             altText="Уже зарегистрированы?"
             altLink="/signin"
             altLinkText="Войти"

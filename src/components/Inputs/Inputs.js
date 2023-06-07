@@ -18,6 +18,8 @@ export default function Inputs(props) {
                 handleChange={props.handleChange}
                 value={props.values[input.type]}
                 errorMessage={props.errors[input.type]}
+                minLength={input.minLength}
+                maxLength={input.maxLength}
             />
         )
     }

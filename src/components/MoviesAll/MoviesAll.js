@@ -13,6 +13,13 @@ import mainApi from "../../utils/mainApi";
 import useStickyState from "../../utils/customHooks/useStickyState";
 import { useWindowResize } from "../../utils/customHooks/useWindowResize";
 
+import {
+    MOBILE_WIDTH_BREAKPOINT,
+    NUM_OF_MOVIES_ON_WIDE_SCREEN,
+    NUM_OF_MOVIES_ON_NARROW_SCREEN,
+    SHORT_MOVIE_DURATION,
+} from "../../utils/constants";
+
 import "./MoviesAll.css";
 
 export default function MoviesAll(props) {
@@ -42,7 +49,7 @@ export default function MoviesAll(props) {
     const [numberOfMoviesToShow, setNumberOfMoviesToShow] = useStickyState(numberOfMoviesPerPage, "numberOfMoviesToShow");
     // =================================================
 
-
+    
 
     // ======= Effect hooks =======
     // =================================================
@@ -57,12 +64,22 @@ export default function MoviesAll(props) {
 
     // Used to setup qtty of movies to show on more btn click:
     React.useEffect(() => {
-        if (width >= 480) {
-            setNumberOfMoviesPerPage(7);
+        if (width >= MOBILE_WIDTH_BREAKPOINT) {
+            setNumberOfMoviesPerPage(NUM_OF_MOVIES_ON_WIDE_SCREEN);
         } else {
-            setNumberOfMoviesPerPage(5);
+            setNumberOfMoviesPerPage(NUM_OF_MOVIES_ON_NARROW_SCREEN);
         }
     }, [width])
+
+    React.useEffect(() => {
+        handleMoviesSearch(movies)
+
+        if (moviesToFind === "") {
+            setFilteredMovies([]);
+            // setInfoMessage("Настало время найти фильм!");
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [shortFilterIsActive])
     // =================================================
 
 
@@ -73,7 +90,7 @@ export default function MoviesAll(props) {
         mainApi.saveMovie(movie)
             .then((savedMovie) => {
                 setSavedMovies(prevValue => {
-                    return [...prevValue, savedMovie.movie]
+                    return [savedMovie.movie, ...prevValue]
                 })
             })
     }
@@ -93,9 +110,25 @@ export default function MoviesAll(props) {
     function getInitialMoviesSearch() {
         setShowPreloader(true);
         
-        // To search movies and to get info about saved movies (to show which movies are saved)
-        // making req to both db
-        Promise.all([moviesApi.getMovies(), mainApi.getMovies()])
+        // If saved movies were get of /saved-movies page
+        // request only all movies from external server:
+        if (savedMovies.length !== 0) {
+            moviesApi.getMovies()
+                .then((allMovies) => {
+                    setMovies(allMovies);
+                    handleMoviesSearch(allMovies);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setInfoMessage("Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз");
+                })
+                .finally(() => {
+                    setShowPreloader(false);
+                })
+        } else {
+            // To search movies and to get info about saved movies (to show which movies are saved)
+            // making req to both db
+            Promise.all([moviesApi.getMovies(), mainApi.getMovies()])
             .then(([allMovies, savedMovies]) => {
                 setMovies(allMovies);
                 setSavedMovies(savedMovies);
@@ -108,6 +141,7 @@ export default function MoviesAll(props) {
             .finally(() => {
                 setShowPreloader(false);
             })
+        }
     }
 
     function handleSearchInputChange(e) {
@@ -116,7 +150,7 @@ export default function MoviesAll(props) {
 
     function searchMovie(movie) {
         if (shortFilterIsActive) {
-            if(movie.duration <= 40) {
+            if(movie.duration <= SHORT_MOVIE_DURATION) {
                 return movie.nameRU.toLowerCase().includes(moviesToFind.toLowerCase());
             }
         } else {
@@ -135,8 +169,6 @@ export default function MoviesAll(props) {
             return;
         }
         setFilteredMovies(filteredMoviesArr)
-
-        setNumberOfMoviesToShow(numberOfMoviesPerPage);
     }
 
     function handleSearchBtnClick(e) {
@@ -154,6 +186,8 @@ export default function MoviesAll(props) {
         } else {
             handleMoviesSearch(movies);
         }
+
+        setNumberOfMoviesToShow(numberOfMoviesPerPage);
     }
 
     function handleCheckboxChange() {
@@ -197,7 +231,7 @@ export default function MoviesAll(props) {
                                 moviesList={
                                     filteredMovies.slice(0, numberOfMoviesToShow)
                                 }
-                                showExpandBtn={numberOfMoviesToShow <= filteredMovies.length}
+                                showExpandBtn={numberOfMoviesToShow < filteredMovies.length}
                                 handleExpandBtnClick={handleExpandBtnClick}
                                 onMovieSave={handleSaveMovie}
                                 onMovieDelete={handleDeleteMovie}

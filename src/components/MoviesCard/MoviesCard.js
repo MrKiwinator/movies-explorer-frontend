@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import MoviesCardSaveBtn from '../MoviesCardSaveBtn/MoviesCardSaveBtn';
 import MoviesCardDeleteBtn from "../MoviesCardDeleteBtn/MoviesCardDeleteBtn";
 
+import { MIN_IN_HOUR } from "../../utils/constants";
+
 import './MoviesCard.css';
 
 export default function MoviesCard(props) {
@@ -18,8 +20,8 @@ export default function MoviesCard(props) {
     function getDuration() {
         const movieDuration = props.movie.duration
 
-        if (movieDuration > 60) {
-            return(`${Math.trunc(movieDuration / 60)}ч ${movieDuration % 60}м`);
+        if (movieDuration > MIN_IN_HOUR) {
+            return(`${Math.trunc(movieDuration / MIN_IN_HOUR)}ч ${movieDuration % MIN_IN_HOUR}м`);
         }
 
         return (`${movieDuration}м`)   

@@ -19,15 +19,15 @@ export default function MoviesSaved(props) {
     // =================================================
     const [savedMovies, setSavedMovies] = useStickyState([], "savedMovies");
 
-    const [filteredMovies, setFilteredMovies] = useStickyState([], "savedMoviesFiltered");
+    const [filteredMovies, setFilteredMovies] = React.useState([]);
 
-    const [moviesToFind, setMoviesToFind] = useStickyState("", "savedMoviesToFind");
+    const [moviesToFind, setMoviesToFind] = React.useState("");
 
-    const [shortFilterIsActive, setShortFilterIsActive] = useStickyState(false, "savedMoviesShorFilterIsActive");
+    const [shortFilterIsActive, setShortFilterIsActive] = React.useState(false);
 
-    const [showPreloader, setShowPreloader] = useStickyState(false, "savedMoviesShowPreloader");
+    const [showPreloader, setShowPreloader] = React.useState(false);
 
-    const [infoMessage, setInfoMessage] = useStickyState("Настало время найти фильм!", "savedMoviesInfoMessage");
+    const [infoMessage, setInfoMessage] = React.useState("");
 
     const [errorMessage, setErrorMessage] = React.useState("");
     const [showErrorMessage, setShowErrorMessage] = React.useState(false);
@@ -46,6 +46,13 @@ export default function MoviesSaved(props) {
     }, [moviesToFind])
     // =================================================
 
+    React.useEffect(() => {
+        if (savedMovies.length === 0) {
+            getInitialMoviesSearch();
+        }
+        handleMoviesSearch(savedMovies);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [savedMovies, shortFilterIsActive])
 
     // SAVED MOVIES
     // =================================================
@@ -149,7 +156,7 @@ export default function MoviesSaved(props) {
                             />
                             :
                             <MoviesCardList 
-                                moviesList={filteredMovies}
+                                moviesList={filteredMovies.reverse()}
                                 savedMovies={savedMovies}
                                 onMovieDelete={handleDeleteMovie}
                             />
