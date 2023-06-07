@@ -42,6 +42,8 @@ function App() {
 
     const [loggedIn, setLoggedIn] = React.useState(false);
 
+    const [showPreloader, setShowPreloader] = React.useState(false)
+
     const [popupIsOpen, setPopupIsOpen] = React.useState(false);
     const [tooltipStatus, setTooltipStatus] = React.useState("");
 
@@ -129,6 +131,8 @@ function App() {
 
         setLoginSubmitBtnDisabled(true);
 
+        setShowPreloader(true)
+
         auth.authorize(email, password)
             .then((data) => {
                 if (data._id) {
@@ -143,6 +147,7 @@ function App() {
             })
             .finally(() => {
                 setLoginSubmitBtnDisabled(false);
+                setShowPreloader(false)
             })
     }
     // =================================================
@@ -155,7 +160,9 @@ function App() {
 
         const { name, email, password} = values;
 
-        setRegisterSubmitBtnDisabled(true)
+        setRegisterSubmitBtnDisabled(true);
+
+        setShowPreloader(true);
 
         auth.register(name, email, password)
             .then(() => {
@@ -182,6 +189,7 @@ function App() {
             })
             .finally(() => {
                 setRegisterSubmitBtnDisabled(false);
+                setShowPreloader(false);
             })
     }
     // =================================================
@@ -201,6 +209,8 @@ function App() {
 
         setUpdateUserSubmitBtnDisabled(true);
 
+        setShowPreloader(true);
+
         mainApi.setUserInfo(name, email)
             .then(() => {
                 setCurrentUser(prevValue => {
@@ -219,6 +229,7 @@ function App() {
             })
             .finally(() => {
                 setUpdateUserSubmitBtnDisabled(false);
+                setShowPreloader(false);
             })
     }
     // =================================================
@@ -267,6 +278,7 @@ function App() {
                         path="/signup"
                         element={
                             <UserRegister 
+                                showPreloader={showPreloader}
                                 handleSubmitClick={handleRegistrationSubmit}
                                 submitBtnDisabled={registerSubmitBtnDisabled}
                                 handleChange={handleChange}
@@ -281,6 +293,7 @@ function App() {
                         path="/signin"
                         element={
                             <UserLogin 
+                                showPreloader={showPreloader}
                                 handleSubmitClick={handleLoginSubmit}
                                 submitBtnDisabled={loginSubmitBtnDisabled}
                                 handleChange={handleChange}
@@ -346,6 +359,7 @@ function App() {
                                 openPopup={openPopup}
                                 submitDisabled={userUpdateSubmitDisabled}
                                 errorMessage={userUpdateErrorMessage}
+                                showPreloader={showPreloader}
                             />
                         }
                     />

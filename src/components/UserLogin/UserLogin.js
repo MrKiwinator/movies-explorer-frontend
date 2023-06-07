@@ -15,6 +15,7 @@ export default function UserLogin(props) {
                     type: "password",
                 }
             ]}
+            showPreloader={props.showPreloader}
             disabled={props.submitBtnDisabled}
             handleSubmitClick={props.handleSubmitClick}
             handleChange={props.handleChange}
