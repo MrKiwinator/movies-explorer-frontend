@@ -38,7 +38,7 @@ class Auth {
     };
 
     logout() {
-        return fetch(`${this._url}/logout`, {
+        return fetch(`${this._url}/signout`, {
             method: "POST",
             credentials: "include",
         })

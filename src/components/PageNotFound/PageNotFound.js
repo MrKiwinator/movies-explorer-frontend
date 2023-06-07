@@ -2,11 +2,19 @@ import { useNavigate } from "react-router-dom";
 import "./PageNotFound.css";
 
 export default function PageNotFound(props) {
+    // ======= Hook for navigation: =======
     const navigate = useNavigate();
 
+
+    
+    // NOT FOUND
+    // =================================================
     function goBack() {
         navigate(-1, {replace: true});
     }
+    // =================================================
+
+
 
     return(
         <section className="not-found">

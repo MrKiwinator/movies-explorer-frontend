@@ -8,8 +8,13 @@ import './MoviesCard.css';
 
 export default function MoviesCard(props) {
 
+    // ======= Hook to get current location =======
     const location = useLocation();
 
+
+
+    // MOVIE CARD
+    // =================================================
     function getDuration() {
         const movieDuration = props.movie.duration
 
@@ -34,7 +39,10 @@ export default function MoviesCard(props) {
         })
         return props.onMovieDelete(movieToDelete._id)
     }
+    // =================================================
 
+
+    
     return (
         <article className="card">
             <div className="card__info-container">

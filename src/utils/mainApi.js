@@ -12,6 +12,28 @@ class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
+    getUserInfo() {
+        return fetch(`${this._url}/users/me`, {
+            method: "GET",
+            credentials: this._credentials,
+            headers: this._headers
+        })
+            .then(this._checkResponse)
+    }
+
+    setUserInfo(name, email) {
+        return fetch(`${this._url}/users/me`, {
+            method: "PATCH",
+            credentials: this._credentials,
+            headers: this._headers,
+            body: JSON.stringify({
+                name,
+                email
+            })
+        })
+            .then(this._checkResponse)
+    }
+
     getMovies() {
         return fetch(`${this._url}/movies`, {
             method: "GET",

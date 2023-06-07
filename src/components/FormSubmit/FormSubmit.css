@@ -32,12 +32,14 @@
 .form-submit__submit-button:hover {
     background-color: rgb(61, 220, 132);
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+    
 }
 
 .form-submit__submit-button:disabled {
     background-color: rgb(248, 248, 248);
     color: #C2C2C2;
     text-shadow: none;
+    transition: none;
 }
 
 .form-submit__alt-text {

@@ -23,6 +23,7 @@ export default function UserRegister(props) {
                     type: "password",
                 },
             ]}
+            disabled={props.submitBtnDisabled}
             handleSubmitClick={props.handleSubmitClick}
             handleChange={props.handleChange}
             values={props.values}

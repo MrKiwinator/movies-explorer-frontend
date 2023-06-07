@@ -23,6 +23,7 @@ export default function Auth(props) {
                     altText={props.altText}
                     altLink={props.altLink}
                     altLinkText={props.altLinkText}
+                    disabled={props.disabled}
                 />
             </div>
         </div>

@@ -8,6 +8,8 @@ import './Header.css';
 import logoPath from '../../images/logo.svg';
 
 export default function Header(props) {
+
+    // ======= Hook to get current location =======
     const location = useLocation();
 
     return(
@@ -29,7 +31,9 @@ export default function Header(props) {
                 <Link className="header__logo-link" to="/">
                     <img className="header__logo" src={logoPath} alt="Logotype" />
                 </Link>
-                <Menu />
+                <Menu 
+                    loggedIn={props.loggedIn}
+                />
             </div>
         </header>
     )

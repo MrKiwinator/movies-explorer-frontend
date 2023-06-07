@@ -13,7 +13,7 @@ export function useFormWithValidation() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setValues({...values, [name]: value});
-        setErrors({...errors, [name]: e.target.validationMessage });
+        setErrors({...errors, [name]: e.target.validity.typeMismatch ? "Неправильный формат электронной почты" : e.target.validationMessage})
         setIsValid(e.target.closest("form").checkValidity());
     };
   

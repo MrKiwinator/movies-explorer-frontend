@@ -6,6 +6,7 @@ import MoviesExpandButton from '../MoviesExpandButton/MoviesExpandButton';
 import './MoviesCardList.css';
 
 export default function MoviesCardList(props) {
+    // ======= Hook to get current location =======
     const location = useLocation();
 
     return(

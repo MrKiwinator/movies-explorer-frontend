@@ -3,7 +3,7 @@ import "./AuthInput.css";
 export default function AuthInput(props) {
     return(
         <div className="auth__input-container">
-            <label className="auth__input-label" htmlFor={props.type}>
+            <label className="auth__input-label" htmlFor={`${props.type}-input`}>
                 {props.label}
             </label>
             <input

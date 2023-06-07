@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 
 import Inputs from "../Inputs/Inputs";
 import AuthInput from "../AuthInput/AuthInput";
@@ -8,7 +7,6 @@ import FormSubmit from "../FormSubmit/FormSubmit";
 import "./AuthForm.css";
 
 export default function AuthForm(props) {
-
     return(
         <section className="auth-form">
             <form 
@@ -36,7 +34,7 @@ export default function AuthForm(props) {
                     altText={props.altText}
                     altLink={props.altLink}
                     altLinkText={props.altLinkText}
-                    disabled={!props.isValid}
+                    disabled={props.disabled}
                 />
 
             </form>

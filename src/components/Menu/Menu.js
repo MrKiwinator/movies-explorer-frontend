@@ -10,20 +10,44 @@ import MenuSide from '../MenuSide/MenuSide';
 import './Menu.css';
 
 export default function Menu(props) {
-    const [sideMenuActive, setSideMenuActive] = React.useState(false);
+    // ======= Hook to get current location =======
+    const location = useLocation();
 
+
+
+    // ======= State hooks =======
+    // =================================================
+    const [sideMenuActive, setSideMenuActive] = React.useState(false);
+    // =================================================
+
+
+
+    // ======= Effect hooks =======
+    // =================================================
+    // Used to close side menu on path change:
+    React.useEffect(() => {
+        setSideMenuActive(false);
+    }, [location])
+    // =================================================
+
+
+    
+    // SIDE MENU
+    // =================================================
     function handleSideMenu() {
         setSideMenuActive(!sideMenuActive);
     }
+    // =================================================
 
-    const location = useLocation();
+
 
     return (
         <>
             {
-                location.pathname === "/" ?
+                location.pathname === "/" & !props.loggedIn?
                     <MenuMain />
                 : (
+                    location.pathname === "/" & props.loggedIn ||
                     location.pathname === "/movies" || 
                     location.pathname === "/saved-movies" ||
                     location.pathname === "/profile"

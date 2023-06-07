@@ -11,6 +11,7 @@ export default function ProfileControlPanel(props) {
                 Редактировать
             </button>
             <Link 
+                onClick={props.hanldeLogout}
                 to="/signin"
                 className="profile__link"
             >

@@ -14,7 +14,7 @@ export default function SearchForm(props) {
 
                         <div className="search__input-container">
                             <input
-                                onChange={props.handleSearchInputChange}
+                                onChange={props.handleChange}
                                 value={props.value}
                                 name="movie"
                                 type="text"
@@ -22,6 +22,7 @@ export default function SearchForm(props) {
                                 placeholder="Фильм"
                                 // required
                             />
+                            <span className="search__input-error">{props.errorMessage}</span>
                             <button 
                                 className="search__submit-button"
                                 type="submit"
