@@ -14,7 +14,7 @@ export default function MoviesCard(props) {
     const location = useLocation();
 
 
-
+    
     // MOVIE CARD
     // =================================================
     function getDuration() {

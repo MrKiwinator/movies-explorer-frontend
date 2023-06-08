@@ -79,9 +79,14 @@ function App() {
         if (loggedIn) {
             mainApi.getUserInfo()
                 .then((userData) => {
-                    setCurrentUser(userData);
+                    if (userId === userData._id) {
+                        setCurrentUser(userData);
+                    } else {
+                        throw new Error("Ошибка авторизации");
+                    }
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err);
                     setLoggedIn(false);
                     navigate("/signin", { replace: true })
                     localStorage.clear()

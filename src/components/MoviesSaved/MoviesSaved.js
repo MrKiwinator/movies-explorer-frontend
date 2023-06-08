@@ -22,6 +22,7 @@ export default function MoviesSaved(props) {
     const [filteredMovies, setFilteredMovies] = React.useState([]);
 
     const [moviesToFind, setMoviesToFind] = React.useState("");
+    const [inputValue, setInputValue] = React.useState("");
 
     const [shortFilterIsActive, setShortFilterIsActive] = React.useState(false);
 
@@ -31,6 +32,8 @@ export default function MoviesSaved(props) {
 
     const [errorMessage, setErrorMessage] = React.useState("");
     const [showErrorMessage, setShowErrorMessage] = React.useState(false);
+
+    const [isInitialCall, setIsInitialCall] = useStickyState(true, "savedMoviesInitialCall");
     // =================================================
 
 
@@ -44,17 +47,35 @@ export default function MoviesSaved(props) {
             setShowErrorMessage(true);
         }
     }, [moviesToFind])
-    // =================================================
 
+    // Used to search movies when changing movieToFind (by clicking search btn).
+    // So if you've found movies, delete some input simbols and reload the page
+    // result won't show you changed movies result as per current input value,
+    // (as like you've pressed search btn), but show you last confirmed results.
     React.useEffect(() => {
-        if (savedMovies.length === 0) {
-            getInitialMoviesSearch();
+        if (moviesToFind) {
+            handleMoviesSearch(savedMovies);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [moviesToFind])
+
+    // Used to get saved movies if it's first call to db and show all saved movies
+    // on page reload:
+    React.useEffect(() => {
+        if (savedMovies.length === 0 & isInitialCall) {
+            getInitialMoviesSearch();
+            setIsInitialCall(false);
+        }
+
         handleMoviesSearch(savedMovies);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [savedMovies, shortFilterIsActive])
+    }, [shortFilterIsActive])
+    // =================================================
 
-    // SAVED MOVIES
+
+
+
+    // USER MOVIES PAGE
     // =================================================
     // Delete movie:
     const handleDeleteMovie = (movieId) => {
@@ -70,7 +91,12 @@ export default function MoviesSaved(props) {
 
             mainApi.getMovies()
                 .then((savedMovies) => {
-                    setSavedMovies(savedMovies);
+                    if (savedMovies.length === 0) {
+                        setSavedMovies([]);
+                    } else {
+                        setSavedMovies(savedMovies);
+                    }
+                    
                     handleMoviesSearch(savedMovies);
                 })
                 .catch((err) => {
@@ -83,7 +109,7 @@ export default function MoviesSaved(props) {
     }
     
     function handleSearchInputChange(e) {
-        setMoviesToFind(e.target.value);
+        setInputValue(e.target.value);
     }
 
     function searchMovie(movie) {
@@ -113,6 +139,8 @@ export default function MoviesSaved(props) {
     function handleSearchBtnClick(e) {
         e.preventDefault();
 
+        setMoviesToFind(inputValue);
+
         if (moviesToFind === "") {
             setShowErrorMessage(true);
             setErrorMessage("Нужно ввести ключевое слово");
@@ -138,7 +166,7 @@ export default function MoviesSaved(props) {
             <Header />
             <main className="movies">
                 <SearchForm
-                    value={moviesToFind}
+                    value={inputValue}
                     handleChange={handleSearchInputChange}
                     handleSubmitClick={handleSearchBtnClick}
                     onChechboxChange={handleCheckboxChange}

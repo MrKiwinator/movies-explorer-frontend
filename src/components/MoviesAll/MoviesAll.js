@@ -35,6 +35,7 @@ export default function MoviesAll(props) {
     const [filteredMovies, setFilteredMovies] = useStickyState([], "allMoviesFiltered");
 
     const [moviesToFind, setMoviesToFind] = useStickyState("", "allMoviesToFind");
+    const [inputValue, setInputValue] = useStickyState("", "allMoviesInputValue");
 
     const [shortFilterIsActive, setShortFilterIsActive] = useStickyState(false, "allMoviesShorFilterIsActive");
 
@@ -55,12 +56,25 @@ export default function MoviesAll(props) {
     // =================================================
     // Used to show an error if no text in search input:
     React.useEffect(() => {
-        if (moviesToFind !== "") {
+        if (moviesToFind) {
             setShowErrorMessage(false);
         } else {
             setShowErrorMessage(true);
         }
+    
     }, [moviesToFind])
+
+    // Used to search movies when changing movieToFind (by clicking search btn).
+    // So if you've found movies, delete some input simbols and reload the page
+    // result won't show you changed movies result as per current input value,
+    // (as like you've pressed search btn), but show you last confirmed results.
+    React.useEffect(() => {
+        if (moviesToFind) {
+            handleMoviesSearch(movies);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [moviesToFind])
+
 
     // Used to setup qtty of movies to show on more btn click:
     React.useEffect(() => {
@@ -145,7 +159,7 @@ export default function MoviesAll(props) {
     }
 
     function handleSearchInputChange(e) {
-        setMoviesToFind(e.target.value);
+        setInputValue(e.target.value);
     }
 
     function searchMovie(movie) {
@@ -173,6 +187,8 @@ export default function MoviesAll(props) {
 
     function handleSearchBtnClick(e) {
         e.preventDefault();
+
+        setMoviesToFind(inputValue);
 
         if (moviesToFind === "") {
             setShowErrorMessage(true);
@@ -208,7 +224,7 @@ export default function MoviesAll(props) {
             />
             <main className="movies">
                 <SearchForm
-                    value={moviesToFind}
+                    value={inputValue}
                     handleChange={handleSearchInputChange}
                     handleSubmitClick={handleSearchBtnClick}
                     onChechboxChange={handleCheckboxChange}
