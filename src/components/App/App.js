@@ -78,9 +78,6 @@ function App() {
                 setLoggedIn(false);
                 navigate("/signin", { replace: true });
                 localStorage.clear();
-                setTooltipStatus("failed");
-                setFailMessage("Что-то пошло не так, попробуйте войти снова!")
-                setPopupIsOpen(true);
             })
             .finally(() => {
                 setShowPreloader(false);
