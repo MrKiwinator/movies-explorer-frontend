@@ -71,19 +71,18 @@ function App() {
             .then((userData) => {
                 setCurrentUser(userData);
                 setLoggedIn(true);
-                navigate(location.pathname, {replace: true})
+                navigate(location.pathname, {replace: true});
             })
             .catch((err) => {
                 console.log(err);
                 setLoggedIn(false);
-                navigate("/signin", { replace: true });
                 localStorage.clear();
             })
             .finally(() => {
                 setShowPreloader(false);
             })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [loggedIn])
 
     // Used to set up the state of form submit buttons:
     React.useEffect(() => {
