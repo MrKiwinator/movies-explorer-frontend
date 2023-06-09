@@ -51,8 +51,8 @@ class Auth {
 }
 
 // local:
-const auth = new Auth ("http://localhost:3000");
+// const auth = new Auth ("http://localhost:3000");
 // server: TODO: CHANGE TO NORMAL SERVER
-// const auth = new Auth ("https://api.movies-explorer.nomoredomains.monster");
+const auth = new Auth ("https://api.movies-explorer.nomoredomains.monster");
 
 export default auth;
