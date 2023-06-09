@@ -184,7 +184,7 @@ export default function MoviesSaved(props) {
                             />
                             :
                             <MoviesCardList 
-                                moviesList={filteredMovies.reverse()}
+                                moviesList={filteredMovies}
                                 savedMovies={savedMovies}
                                 onMovieDelete={handleDeleteMovie}
                             />
