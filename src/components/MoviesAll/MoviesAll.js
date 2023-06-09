@@ -35,7 +35,7 @@ export default function MoviesAll(props) {
     const [filteredMovies, setFilteredMovies] = useStickyState([], "allMoviesFiltered");
 
     const [moviesToFind, setMoviesToFind] = useStickyState("", "allMoviesToFind");
-    const [inputValue, setInputValue] = useStickyState("", "allMoviesInputValue");
+    const [lastMoviesSearch, setLastMoviesSearch] = useStickyState("", "allMoviesLastMoviesSearch");
 
     const [shortFilterIsActive, setShortFilterIsActive] = useStickyState(false, "allMoviesShorFilterIsActive");
 
@@ -69,11 +69,9 @@ export default function MoviesAll(props) {
     // result won't show you changed movies result as per current input value,
     // (as like you've pressed search btn), but show you last confirmed results.
     React.useEffect(() => {
-        if (moviesToFind) {
-            handleMoviesSearch(movies);
-        }
+        handleMoviesSearch(movies, lastMoviesSearch);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [moviesToFind])
+    }, [])
 
 
     // Used to setup qtty of movies to show on more btn click:
@@ -86,11 +84,10 @@ export default function MoviesAll(props) {
     }, [width])
 
     React.useEffect(() => {
-        handleMoviesSearch(movies)
+        handleMoviesSearch(movies, lastMoviesSearch);
 
-        if (moviesToFind === "") {
+        if (lastMoviesSearch === "") {
             setFilteredMovies([]);
-            // setInfoMessage("Настало время найти фильм!");
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [shortFilterIsActive])
@@ -130,7 +127,7 @@ export default function MoviesAll(props) {
             moviesApi.getMovies()
                 .then((allMovies) => {
                     setMovies(allMovies);
-                    handleMoviesSearch(allMovies);
+                    handleMoviesSearch(allMovies, moviesToFind);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -146,7 +143,7 @@ export default function MoviesAll(props) {
             .then(([allMovies, savedMovies]) => {
                 setMovies(allMovies);
                 setSavedMovies(savedMovies);
-                handleMoviesSearch(allMovies);
+                handleMoviesSearch(allMovies, moviesToFind);
             })
             .catch((err) => {
                 console.log(err);
@@ -159,22 +156,22 @@ export default function MoviesAll(props) {
     }
 
     function handleSearchInputChange(e) {
-        setInputValue(e.target.value);
+        setMoviesToFind(e.target.value);
     }
 
-    function searchMovie(movie) {
+    function searchMovie(movie, searchString) {
         if (shortFilterIsActive) {
             if(movie.duration <= SHORT_MOVIE_DURATION) {
-                return movie.nameRU.toLowerCase().includes(moviesToFind.toLowerCase());
+                return movie.nameRU.toLowerCase().includes(searchString.toLowerCase());
             }
         } else {
-            return movie.nameRU.toLowerCase().includes(moviesToFind.toLowerCase());
+            return movie.nameRU.toLowerCase().includes(searchString.toLowerCase());
         }
     }
 
-    function handleMoviesSearch(movies) {
+    function handleMoviesSearch(movies, searchString) {
         const filteredMoviesArr = movies.filter((movie) => {
-            return searchMovie(movie);
+            return searchMovie(movie, searchString);
         });
 
         if (filteredMoviesArr.length === 0) {
@@ -188,8 +185,6 @@ export default function MoviesAll(props) {
     function handleSearchBtnClick(e) {
         e.preventDefault();
 
-        setMoviesToFind(inputValue);
-
         if (moviesToFind === "") {
             setShowErrorMessage(true);
             setErrorMessage("Нужно ввести ключевое слово");
@@ -200,9 +195,10 @@ export default function MoviesAll(props) {
         if (movies.length === 0) {
             getInitialMoviesSearch();
         } else {
-            handleMoviesSearch(movies);
+            handleMoviesSearch(movies, moviesToFind);
         }
 
+        setLastMoviesSearch(moviesToFind);
         setNumberOfMoviesToShow(numberOfMoviesPerPage);
     }
 
@@ -224,7 +220,7 @@ export default function MoviesAll(props) {
             />
             <main className="movies">
                 <SearchForm
-                    value={inputValue}
+                    value={moviesToFind}
                     handleChange={handleSearchInputChange}
                     handleSubmitClick={handleSearchBtnClick}
                     onChechboxChange={handleCheckboxChange}

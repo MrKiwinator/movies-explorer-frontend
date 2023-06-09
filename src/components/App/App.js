@@ -146,7 +146,7 @@ function App() {
             })
             .finally(() => {
                 setLoginSubmitBtnDisabled(false);
-                setShowPreloader(false)
+                setShowPreloader(false);
             })
     }
     // =================================================
