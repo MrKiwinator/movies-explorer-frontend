@@ -32,7 +32,6 @@ class Auth {
         })
             .then(this._checkResponse)
             .then((data) => {
-                localStorage.setItem("userId", data._id);
                 return data;
             })
     };

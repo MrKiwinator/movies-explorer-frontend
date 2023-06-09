@@ -63,37 +63,30 @@ function App() {
 
     // ======= Effect hooks =======
     // =================================================
-    // Used to check if user was logged in and if so let hin pass auth
-    // and save current user info:
+    // Used to get user info and pass auth:
     React.useEffect(() => {
-        // getting userId from the localStorage:
-        const userId = localStorage.getItem('userId');
+        setShowPreloader(true);
 
-        // if userId exist let user to pass auth:
-        if (userId) {
-            setLoggedIn(true);
-            navigate(location.pathname, {replace: true})
-        }
-        
-        // if user loggedIn send request on server to get required data:
-        if (loggedIn) {
-            mainApi.getUserInfo()
-                .then((userData) => {
-                    if (userId === userData._id) {
-                        setCurrentUser(userData);
-                    } else {
-                        throw new Error("Ошибка авторизации");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setLoggedIn(false);
-                    navigate("/signin", { replace: true })
-                    localStorage.clear()
-                })
-        }
+        mainApi.getUserInfo()
+            .then((userData) => {
+                setCurrentUser(userData);
+                setLoggedIn(true);
+                navigate(location.pathname, {replace: true})
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoggedIn(false);
+                navigate("/signin", { replace: true });
+                localStorage.clear();
+                setTooltipStatus("failed");
+                setFailMessage("Что-то пошло не так, попробуйте войти снова!")
+                setPopupIsOpen(true);
+            })
+            .finally(() => {
+                setShowPreloader(false);
+            })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loggedIn])
+    }, [])
 
     // Used to set up the state of form submit buttons:
     React.useEffect(() => {
