@@ -80,6 +80,9 @@ function App() {
                 .catch((err) => {
                     console.log(err);
                     deleteUserInfo();
+                    setPopupIsOpen(true);
+                    setTooltipStatus("failed");
+                    setFailMessage("Что-то пошло не так :(")
                 })
                 .finally(() => setShowPreloader(false))
         }
@@ -89,8 +92,6 @@ function App() {
     // Used for getting current user data:
     React.useEffect(() => {
         if (loggedIn) {
-            console.log("Сработало!")
-
             mainApi.getUserInfo()
                 .then((userData) => {
                     setCurrentUser(userData);
@@ -98,6 +99,9 @@ function App() {
                 .catch((err) => {
                     console.log(err);
                     deleteUserInfo();
+                    setPopupIsOpen(true);
+                    setTooltipStatus("failed");
+                    setFailMessage("Что-то пошло не так :(")
                 })
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -258,14 +262,12 @@ function App() {
         e.preventDefault();
         
         // Removing all data from local storage
-        localStorage.clear();
+        deleteUserInfo();
         navigate('/', {replace: true});
-        setLoggedIn(false)
     }
     
     function deleteUserInfo() {
         localStorage.clear();
-        navigate('/', {replace: true});
         setLoggedIn(false);
     }
     // =================================================

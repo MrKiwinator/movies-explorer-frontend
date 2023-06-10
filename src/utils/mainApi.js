@@ -1,7 +1,6 @@
 class Api {
     constructor(options) {
         this._url = options.baseUrl;
-        this._headers = options.headers;
         this._credentials = options.credentials;
     }
 
@@ -15,8 +14,10 @@ class Api {
     getUserInfo() {
         return fetch(`${this._url}/users/me`, {
             method: "GET",
-            // credentials: this._credentials,
-            headers: this._headers,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            }
         })
             .then(this._checkResponse)
     }
@@ -24,8 +25,10 @@ class Api {
     setUserInfo(name, email) {
         return fetch(`${this._url}/users/me`, {
             method: "PATCH",
-            // credentials: this._credentials,
-            headers: this._headers,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            },
             body: JSON.stringify({
                 name,
                 email
@@ -37,8 +40,10 @@ class Api {
     getMovies() {
         return fetch(`${this._url}/movies`, {
             method: "GET",
-            // credentials: this._credentials,
-            headers: this._headers,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            }
         })
             .then(this._checkResponse)
     }
@@ -46,8 +51,10 @@ class Api {
     saveMovie(movie) {
         return fetch(`${this._url}/movies`, {
             method: "POST",
-            // credentials: this._credentials,
-            headers: this._headers,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            },
             body: JSON.stringify({
                 country: movie.country,
                 director: movie.director,
@@ -68,8 +75,10 @@ class Api {
     deleteMovie(movieId) {
         return fetch (`${this._url}/movies/${movieId}`, {
             method: "DELETE",
-            // credentials: this._credentials,
-            headers: this._headers
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            }
         })
             .then(this._checkResponse)
     }
@@ -81,10 +90,6 @@ const api = new Api({
     // for server:
     baseUrl: "https://api.movies-explorer.nomoredomains.monster",
     // credentials: "include",
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
-    }
 });
 
 export default api;

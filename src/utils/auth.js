@@ -32,8 +32,10 @@ class Auth {
         })
             .then(this._checkResponse)
             .then((data) => {
-                localStorage.setItem("jwt", data.token);
-                return data;
+                if (data.token) {
+                    localStorage.setItem("jwt", data.token);
+                    return data;
+                }
             })
     };
 
