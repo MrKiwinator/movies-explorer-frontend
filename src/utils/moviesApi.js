@@ -15,7 +15,7 @@ class MoviesApi {
     getMovies() {
         return fetch(this._url, {
             method: "GET",
-            credentials: this._credentials,
+            // credentials: this._credentials,
             headers: this._headers,
         })
             .then(this._checkResponse)
@@ -24,7 +24,7 @@ class MoviesApi {
 
 const moviesApi = new MoviesApi({
     baseUrl: "https://api.nomoreparties.co/beatfilm-movies",
-    // credentials: "include",
+    // // credentials: "include",
     headers: {
         'Content-Type': 'application/json',
     }

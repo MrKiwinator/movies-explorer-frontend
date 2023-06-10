@@ -56,31 +56,50 @@ function App() {
 
     const [editProfileIsActive, setEditProfileIsActive] = React.useState(false);
 
-    const [userUpdateErrorMessage, setUserUpdateErrorMessage] = React.useState("")
+    const [userUpdateErrorMessage, setUserUpdateErrorMessage] = React.useState("");
     // =================================================
 
 
 
     // ======= Effect hooks =======
     // =================================================
-    // Used to get user info and pass auth:
+    // Used to check token and if ok - let user pass auth:
     React.useEffect(() => {
-        setShowPreloader(true);
+        const jwt = localStorage.getItem('jwt');
 
-        mainApi.getUserInfo()
-            .then((userData) => {
-                setCurrentUser(userData);
-                setLoggedIn(true);
-                navigate(location.pathname, {replace: true});
-            })
-            .catch((err) => {
-                console.log(err);
-                setLoggedIn(false);
-                localStorage.clear();
-            })
-            .finally(() => {
-                setShowPreloader(false);
-            })
+        if (jwt){
+            setShowPreloader(true);
+
+            auth.checkToken(jwt)
+                .then((userData) => {
+                    if (userData){
+                        setLoggedIn(true);
+                        navigate(location.pathname, {replace: true});
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    deleteUserInfo();
+                })
+                .finally(() => setShowPreloader(false))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    // Used for getting current user data:
+    React.useEffect(() => {
+        if (loggedIn) {
+            console.log("Сработало!")
+
+            mainApi.getUserInfo()
+                .then((userData) => {
+                    setCurrentUser(userData);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    deleteUserInfo();
+                })
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loggedIn])
 
@@ -117,12 +136,9 @@ function App() {
     // =================================================
 
 
+
     // USER LOGIN
     // =================================================
-    function handleUserLogin() {
-        setLoggedIn(true);
-    }
-
     const handleLoginSubmit = (e) => {
         e.preventDefault();
 
@@ -132,10 +148,14 @@ function App() {
 
         setShowPreloader(true)
 
+        handleLogin(email, password);
+    }
+
+    function handleLogin(email, password) {
         auth.authorize(email, password)
             .then((data) => {
-                if (data._id) {
-                    handleUserLogin(e);
+                if (data.token) {
+                    setLoggedIn(true);
                     navigate('/movies', {replace: true});
                 }
             })   
@@ -143,6 +163,7 @@ function App() {
                 setTooltipStatus("failed");
                 setFailMessage("Что-то пошло не так :(")
                 setPopupIsOpen(true);
+                handleUserLogout();
             })
             .finally(() => {
                 setLoginSubmitBtnDisabled(false);
@@ -163,23 +184,14 @@ function App() {
 
         setShowPreloader(true);
 
+        handleRegistration(name, email, password);
+    }
+
+    function handleRegistration(name, email, password) {
         auth.register(name, email, password)
             .then(() => {
                 // If registration was successful - try to authorize with same data
-                auth.authorize(email, password)
-                    .then((data) => {
-                        if (data._id) {
-                            setValues(prevValues => {
-                                return {...prevValues, email: "", password: ""}
-                            })
-                            handleUserLogin(e);
-                            navigate('/movies', {replace: true});
-                        }
-                    })   
-                    .catch(() => {
-                        navigate("/signin");
-                        popupIsOpen(false);
-                    })
+                handleLogin(email, password);
             })
             .catch(() => {
                 setTooltipStatus("failed");
@@ -244,15 +256,17 @@ function App() {
     // =================================================
     const handleUserLogout = (e) => {
         e.preventDefault();
-
-        auth.logout(currentUser._id)
-            .catch((err) => {
-                console.log(err);
-            })
+        
         // Removing all data from local storage
         localStorage.clear();
         navigate('/', {replace: true});
         setLoggedIn(false)
+    }
+    
+    function deleteUserInfo() {
+        localStorage.clear();
+        navigate('/', {replace: true});
+        setLoggedIn(false);
     }
     // =================================================
 

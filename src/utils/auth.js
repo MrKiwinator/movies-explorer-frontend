@@ -24,7 +24,7 @@ class Auth {
     authorize(email, password) {
         return fetch(`${this._url}/signin`, {
             method: "POST",
-            credentials: "include",
+            // credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -32,14 +32,29 @@ class Auth {
         })
             .then(this._checkResponse)
             .then((data) => {
+                localStorage.setItem("jwt", data.token);
                 return data;
             })
     };
 
+    checkToken(token) {
+        return fetch(`${this._url}/users/me`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            return data;
+        })
+    } 
+
     logout() {
         return fetch(`${this._url}/signout`, {
             method: "POST",
-            credentials: "include",
+            // credentials: "include",
         })
             .then((res) => {
                 if (res.ok) {
