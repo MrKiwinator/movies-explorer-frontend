@@ -7,16 +7,25 @@ import profileIcon from '../../images/profile.svg';
 import sideMenuClose from '../../images/side-menu-close.svg';
 
 export default function MenuSide(props) {
+    // ======= Hook to get current location =======
     const location = useLocation();
 
+    // ======= Ref hook =======
     const overlay = React.useRef();
 
+
+
+    // SIDE MENU
+    // =================================================
     function handleOverlayClick(e) {
         if (e.target === overlay.current) {
             props.handleCloseSideMenu();
         }
     }
+    // =================================================
 
+
+    
     return(
         <div ref={overlay} onClick={handleOverlayClick} className={`side-menu ${props.isActive ? "side-menu_active" : ""}`}>
             <div className={`side-menu__container ${

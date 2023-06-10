@@ -13,6 +13,8 @@ export default function ProfileInput(props) {
                 type={props.type}
                 name={props.type}
                 disabled={props.disabled}
+                minLength={props.minLength}
+                maxLength={props.maxLength}
                 value={props.value}
                 onChange={props.handleChange}
                 className={

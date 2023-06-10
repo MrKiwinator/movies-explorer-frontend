@@ -1,3 +1,5 @@
+import React from "react";
+
 import "./Inputs.css";
 
 export default function Inputs(props) {
@@ -13,8 +15,11 @@ export default function Inputs(props) {
                 label={input.label}
                 type={input.type}
                 disabled={props.disabled}
-                value={input.value}
-                handleChange={input.handleChange}
+                handleChange={props.handleChange}
+                value={props.values[input.type]}
+                errorMessage={props.errors[input.type]}
+                minLength={input.minLength}
+                maxLength={input.maxLength}
             />
         )
     }
@@ -27,6 +32,7 @@ export default function Inputs(props) {
                         renderInputComponent(input)
                     )
                 })
+                
             }
         </div>
     )

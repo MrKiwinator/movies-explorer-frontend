@@ -2,7 +2,7 @@
 .auth__inputs {
     display: flex;
     flex-direction: column;
-    gap: 20px; 
+    gap: 20px;
 }
 
 /* FOR PROFILE BLOCK */

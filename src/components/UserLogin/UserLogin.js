@@ -15,6 +15,13 @@ export default function UserLogin(props) {
                     type: "password",
                 }
             ]}
+            showPreloader={props.showPreloader}
+            disabled={props.submitBtnDisabled}
+            handleSubmitClick={props.handleSubmitClick}
+            handleChange={props.handleChange}
+            values={props.values}
+            errors={props.errors}
+            isValid={props.isValid}
             greeting="Рады видеть!"
             buttonText="Войти"
             altText="Ещё не зарегистрированы?"

@@ -1,36 +1,283 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import './App.css';
-import Header from '../Header/Header';
 import Main from '../Main/Main';
-import Movies from '../Movies/Movies';
-import Footer from '../Footer/Footer';
+import MoviesAll from '../MoviesAll/MoviesAll';
+import MoviesSaved from '../MoviesSaved/MoviesSaved';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import UserLogin from '../UserLogin/UserLogin';
 import UserRegister from '../UserRegister/UserRegister';
 import UserProfile from '../UserProfile/UserProfile';
 import PopupInfoTooltip from '../PopupInfoTooltip/PopupInfoTooltip';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+
+import { CurrentUserContext } from "../../context/CurrentUserContext";
+
+import { useFormWithValidation } from "../../utils/customHooks/useFormValidator";
+
+import auth from "../../utils/auth";
+import mainApi from "../../utils/mainApi";
 
 function App() {
-    const [loggedIn, setLoggedIn] = React.useState(false);
 
-    const [popupIsOpen, setPopupIsOpen] = React.useState(false);
+    // ======= Custom hook for validation =======
+    const { values, setValues, errors, handleChange, isValid } = useFormWithValidation();
 
-    // TODO: Remove hardcode after level-2
+    // ======= Hook for navigation: =======
+    const navigate = useNavigate();
+
+    // ======= Hook to get current location =======
+    const location = useLocation();
+
+
+
+    // ======= State hooks =======
+    // =================================================
     const [currentUser, setCurrentUser] = React.useState({
-        name: "Виталий",
-        email: "pochta@yandex.ru",
+        name: "",
+        email: "",
+        password: "",
     })
 
-    function handleUserUpdate(userInfo) {
-        setCurrentUser(userInfo);
+    const [loggedIn, setLoggedIn] = React.useState(false);
+
+    const [showPreloader, setShowPreloader] = React.useState(false)
+
+    const [popupIsOpen, setPopupIsOpen] = React.useState(false);
+    const [tooltipStatus, setTooltipStatus] = React.useState("");
+
+    const [successMessage, setSuccessMessage] = React.useState("");
+    const [failMessage, setFailMessage] = React.useState("");
+
+    const [loginSubmitBtnDisabled, setLoginSubmitBtnDisabled] = React.useState(false);
+    const [registerSubmitBtnDisabled, setRegisterSubmitBtnDisabled] = React.useState(false);
+    const [userUpdateSubmitBtnDisabled, setUserUpdateSubmitBtnDisabled] = React.useState(true);
+
+    const [editProfileIsActive, setEditProfileIsActive] = React.useState(false);
+
+    const [userUpdateErrorMessage, setUserUpdateErrorMessage] = React.useState("");
+    // =================================================
+
+
+
+    // ======= Effect hooks =======
+    // =================================================
+    // Used to check token and if ok - let user pass auth:
+    React.useEffect(() => {
+        const jwt = localStorage.getItem('jwt');
+
+        if (jwt){
+            setShowPreloader(true);
+
+            auth.checkToken(jwt)
+                .then((userData) => {
+                    if (userData){
+                        setLoggedIn(true);
+                        navigate(location.pathname, {replace: true});
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    deleteUserInfo();
+                    setPopupIsOpen(true);
+                    setTooltipStatus("failed");
+                    setFailMessage("Что-то пошло не так :(")
+                })
+                .finally(() => setShowPreloader(false))
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    // Used for getting current user data:
+    React.useEffect(() => {
+        if (loggedIn) {
+            mainApi.getUserInfo()
+                .then((userData) => {
+                    setCurrentUser(userData);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    deleteUserInfo();
+                    setPopupIsOpen(true);
+                    setTooltipStatus("failed");
+                    setFailMessage("Что-то пошло не так :(")
+                })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loggedIn])
+
+    // Used to set up the state of form submit buttons:
+    React.useEffect(() => {
+        setLoginSubmitBtnDisabled(!isValid);
+        setRegisterSubmitBtnDisabled(!isValid);
+        setUserUpdateSubmitBtnDisabled(!isValid);
+    }, [isValid])
+
+    // Set initial input state as current user data on user update:
+    React.useEffect(() => {
+        setValues(prevValue => {
+            return {...prevValue, name: currentUser.name, email: currentUser.email}
+        })
+    }, [currentUser.email, currentUser.name, setValues])
+
+    // Handle error message on user update:
+    React.useEffect(() => {
+        if (values.name === currentUser.name & values.email === currentUser.email) {
+            setUserUpdateSubmitBtnDisabled(true);
+            setUserUpdateErrorMessage("Измените данные пользователя");
+            return;
+        }
+        else if (!isValid) {
+            setUserUpdateSubmitBtnDisabled(true);
+            setUserUpdateErrorMessage("Пожалуйста, проверьте правильность ввода данных");
+            return;
+        }
+        setUserUpdateSubmitBtnDisabled(false);
+        setUserUpdateErrorMessage("");
+
+    }, [currentUser, values, isValid])
+    // =================================================
+
+
+
+    // USER LOGIN
+    // =================================================
+    const handleLoginSubmit = (e) => {
+        e.preventDefault();
+
+        const { email, password} = values;
+
+        setLoginSubmitBtnDisabled(true);
+
+        setShowPreloader(true)
+
+        handleLogin(email, password);
     }
 
+    function handleLogin(email, password) {
+        auth.authorize(email, password)
+            .then((data) => {
+                if (data.token) {
+                    setLoggedIn(true);
+                    navigate('/movies', {replace: true});
+                }
+            })   
+            .catch(() => {
+                setTooltipStatus("failed");
+                setFailMessage("Что-то пошло не так :(")
+                setPopupIsOpen(true);
+                handleUserLogout();
+            })
+            .finally(() => {
+                setLoginSubmitBtnDisabled(false);
+                setShowPreloader(false);
+            })
+    }
+    // =================================================
+
+    
+    // USER REGISTRATION
+    // =================================================
+    const handleRegistrationSubmit = (e) => {
+        e.preventDefault();
+
+        const { name, email, password} = values;
+
+        setRegisterSubmitBtnDisabled(true);
+
+        setShowPreloader(true);
+
+        handleRegistration(name, email, password);
+    }
+
+    function handleRegistration(name, email, password) {
+        auth.register(name, email, password)
+            .then(() => {
+                // If registration was successful - try to authorize with same data
+                handleLogin(email, password);
+            })
+            .catch(() => {
+                setTooltipStatus("failed");
+                setFailMessage("Что-то пошло не так :(")
+                setPopupIsOpen(true);
+            })
+            .finally(() => {
+                setRegisterSubmitBtnDisabled(false);
+                setShowPreloader(false);
+            })
+    }
+    // =================================================
+
+
+
+    // USER UPDATE:
+    // =================================================
+    function handleEditProfileClick() {
+        setEditProfileIsActive(true);
+    }
+
+    const handleUserUpdateSubmit = (e) => {
+        e.preventDefault();
+
+        const { name, email } = values;
+
+        // To don't let to send request in input values equal to current user data:
+        if (name === currentUser.name & email === currentUser.email) {
+            return;
+        }
+
+        setUserUpdateSubmitBtnDisabled(true);
+
+        setShowPreloader(true);
+
+        mainApi.setUserInfo(name, email)
+            .then(() => {
+                setCurrentUser(prevValue => {
+                    return {...prevValue, name, email}
+                })
+                setSuccessMessage("Вы успешно изменили данные!");
+                setTooltipStatus("success");
+                setPopupIsOpen(true);
+                setEditProfileIsActive(false)
+            })
+            .catch((err) => {
+                console.log(err);
+                setFailMessage("Что-то пошло не так :(")
+                setTooltipStatus("failed");
+                setPopupIsOpen(true);
+            })
+            .finally(() => {
+                setUserUpdateSubmitBtnDisabled(false);
+                setShowPreloader(false);
+            })
+    }
+    // =================================================
+
+
+
+    // USER LOGOUT:
+    // =================================================
+    const handleUserLogout = (e) => {
+        e.preventDefault();
+        
+        // Removing all data from local storage
+        deleteUserInfo();
+        navigate('/', {replace: true});
+    }
+    
+    function deleteUserInfo() {
+        localStorage.clear();
+        setLoggedIn(false);
+    }
+    // =================================================
+
+
+
     // POPUP:
+    // =================================================
     // If click on ovelay during closing of popup, it could be opened again.
     // So to avoid such issue function of popup open/close were separated
-
     function openPopup() {
         setPopupIsOpen(true);
     }
@@ -38,96 +285,123 @@ function App() {
     function closePopup() {
         setPopupIsOpen(false);
     }
+    // =================================================
 
+
+    
     return (
-        <div className="app">
-            <Routes>
+        <CurrentUserContext.Provider value={currentUser}>
+            <div className="app">
+                <Routes>
 
-                <Route
-                    path="/signup"
-                    element={
-                        <>
-                            <UserRegister />
-                        </>
-                    }
-                />
+                    <Route
+                        path="/signup"
+                        element={
+                            <ProtectedRoute 
+                                element={UserRegister}
+                                loggedIn={!loggedIn}
+                                path={"/movies"}
+                                showPreloader={showPreloader}
+                                handleSubmitClick={handleRegistrationSubmit}
+                                submitBtnDisabled={registerSubmitBtnDisabled}
+                                handleChange={handleChange}
+                                values={values}
+                                errors={errors}
+                                isValid={isValid}
+                            />
+                        }
+                    />
 
-                <Route
-                    path="/signin"
-                    element={
-                        <>
-                            <UserLogin />
-                        </>
-                    }
-                />
-                
-                <Route 
-                    path="/" 
-                    element={
-                        <>
-                            <Header
+                    <Route
+                        path="/signin"
+                        element={
+                            <ProtectedRoute 
+                                element={UserLogin}
+                                loggedIn={!loggedIn}
+                                path={"/movies"}
+                                showPreloader={showPreloader}
+                                handleSubmitClick={handleLoginSubmit}
+                                submitBtnDisabled={loginSubmitBtnDisabled}
+                                handleChange={handleChange}
+                                values={values}
+                                errors={errors}
+                                isValid={isValid}
+                            />
+                        }
+                    />
+                    
+                    <Route 
+                        path="/" 
+                        element={           
+                            <Main 
                                 loggedIn={loggedIn}
                             />
-                            <Main /> 
-                            <Footer />
-                        </>
-                    }
-                />
+                        }
+                    />
 
-                <Route
-                    path="/movies"
-                    element={
-                        <>
-                            <Header />
-                            <Movies />
-                            <Footer />
-                        </>
-                    }
-                />
+                    <Route 
+                        path="*"
+                        element={
+                            <PageNotFound />
+                        }
+                    />
 
-                <Route
-                    path="/saved-movies"
-                    element={
-                        <>
-                            <Header />
-                            <Movies />
-                            <Footer />
-                        </>
-                    }
-                />
+                    <Route
+                        path="/movies"
+                        element={
+                            <ProtectedRoute 
+                                element={MoviesAll}
+                                loggedIn={loggedIn}
+                                path={"/signin"}
+                            />
+                        }
+                    />
 
-                <Route
-                    path="/Profile"
-                    element={
-                        <>  
-                            <Header />
-                            <UserProfile 
-                                currentUser={currentUser}
-                                onUserUpdate={handleUserUpdate}
+                    <Route
+                        path="/saved-movies"
+                        element={
+                            <ProtectedRoute 
+                                element={MoviesSaved}
+                                loggedIn={loggedIn}
+                                path={"/signin"}
+                            />
+                            
+                        }
+                    />
+
+                    <Route
+                        path="/Profile"
+                        element={
+                            <ProtectedRoute 
+                                element={UserProfile}
+                                loggedIn={loggedIn}
+                                path={"/signin"}
+                                editProfileIsActive={editProfileIsActive}
+                                handleEditProfileClick={handleEditProfileClick}
+                                handleSubmitClick={handleUserUpdateSubmit}
+                                handleChange={handleChange}
+                                values={values}
+                                isValid={isValid}
+                                userName={currentUser.name}
+                                hanldeLogout={handleUserLogout}
                                 openPopup={openPopup}
+                                submitBtnDisabled={userUpdateSubmitBtnDisabled}
+                                errorMessage={userUpdateErrorMessage}
+                                showPreloader={showPreloader}
                             />
-                            <PopupInfoTooltip
-                                // TODO: remove after review:
-                                // tooltipStatus="failed"
-                                isOpen={popupIsOpen}
-                                onClose={closePopup}
-                                tooltipStatus="success"
-                                successMessage="Вы успешно изменили данные!"
-                                failMessage="При обновлении профиля произошла ошибка."
-                            />
-                        </>
-                    }
-                />
+                        }
+                    />
 
-                <Route 
-                    path="*"
-                    element={
-                        <PageNotFound />
-                    }
+                </Routes>
+                <PopupInfoTooltip
+                    isOpen={popupIsOpen}
+                    onClose={closePopup}
+                    tooltipStatus={tooltipStatus}
+                    successMessage={successMessage}
+                    failMessage={failMessage}
                 />
-
-            </Routes>
-        </div>
+            </div>
+        </CurrentUserContext.Provider>
     );
 }
 

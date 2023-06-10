@@ -1,5 +1,7 @@
 import React from "react";
 
+import Header from "../Header/Header";
+import Preloader from "../Preloader/Preloader";
 import ProfileControlPanel from "../ProfileControlPanel/ProfileControlPanel";
 import FormSubmit from "../FormSubmit/FormSubmit";
 import Inputs from "../Inputs/Inputs";
@@ -8,95 +10,66 @@ import ProfileInput from "../ProfileInput/ProfileInput";
 import "./UserProfile.css";
 
 export default function UserProfile(props) {
-    const [editProfileIsActive, setEditProfileIsActive] = React.useState(false);
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [submitDisabled, setSubmitDisabled] = React.useState(true);
-
-    React.useEffect(() => {
-        setName(props.currentUser.name);
-        setEmail(props.currentUser.email);
-    }, [props.currentUser])
-
-    function handleEditProfileClick() {
-        setEditProfileIsActive(true);
-    }
-
-    function handleSubmitBtnState(e) {
-        if (e.target.value === props.currentUser.name || e.target.value === props.currentUser.email) {
-            setSubmitDisabled(true);
-        } else {
-            setSubmitDisabled(false);
-        }
-        
-    }
-
-    function handleNameChange(e) {
-        setName(e.target.value);
-        handleSubmitBtnState(e);
-    }
-
-    function handleEmailChange(e) {
-        setEmail(e.target.value);
-        handleSubmitBtnState(e);
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        console.log(name)
-        props.onUserUpdate({name, email})
-        setEditProfileIsActive(false);
-        setSubmitDisabled(true);
-        props.openPopup();
-    }
 
     return(
-        <section className="profile">
-            <form className="profile__form-container" onSubmit={handleSubmit}>
+        <>
+            <Header />
+            {
+                props.showPreloader ?
+                <Preloader />
+                :
+                <main className="profile">
+                    <form className="profile__form-container" onSubmit={props.handleSubmitClick}>
 
-                <h3 className="profile__title">
-                    Привет, {props.currentUser.name}!
-                </h3>
+                        <h3 className="profile__title">
+                            Привет, {props.userName}!
+                        </h3>
 
-                <Inputs
-                    block="profile"
-                    disabled={!editProfileIsActive}
-                    inputComponent={ProfileInput}
-                    inputsList={[
+                        <Inputs
+                            block="profile"
+                            disabled={!props.editProfileIsActive}
+                            inputComponent={ProfileInput}
+                            inputsList={[
+                                {
+                                    label: "Имя",
+                                    type: "name",
+                                    minLength: "2",
+                                    maxLength: "30",
+                                },
+                                {
+                                    label: "E-mail",
+                                    type: "email",
+                                },
+                            ]}
+                            handleChange={props.handleChange}
+                            errors={props.errorMessage}
+                            values={props.values}
+                            isValid={props.isValid}
+                        />
+
                         {
-                            label: "Имя",
-                            type: "name",
-                            value: name,
-                            handleChange: handleNameChange,
-                        },
-                        {
-                            label: "E-mail",
-                            type: "email",
-                            value: email,
-                            handleChange: handleEmailChange,
-                        },
-                    ]}
-                />
+                            props.editProfileIsActive ?
+                            
+                            <FormSubmit 
+                                buttonText="Сохранить"
+                                altTextIsActive={false}
+                                altText={props.altText}
+                                altLink={props.altLink}
+                                altLinkText={props.altLinkText}
+                                disabled={props.submitBtnDisabled}
+                                errorMessage={props.errorMessage}
+                            />
+                            :
+                            <ProfileControlPanel
+                                handleEditProfile={props.handleEditProfileClick}
+                                hanldeLogout={props.hanldeLogout}
+                            />
+                        }
 
-                {
-                    editProfileIsActive ?
-                    
-                    <FormSubmit 
-                        buttonText="Сохранить"
-                        altTextIsActive={false}
-                        altText={props.altText}
-                        altLink={props.altLink}
-                        altLinkText={props.altLinkText}
-                        disabled={submitDisabled}
-                        // Uncomment to check error message:
-                        // errorMessage={"При обновлении профиля произошла ошибка."}
-                    /> 
-                    :
-                    <ProfileControlPanel handleEditProfile={handleEditProfileClick}/>
-                }
-
-            </form>
-        </section>
+                    </form>
+                </main>
+            }
+            
+        </>
     )
 }

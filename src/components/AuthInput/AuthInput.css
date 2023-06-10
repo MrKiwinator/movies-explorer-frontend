@@ -32,10 +32,9 @@
 }
 
 .auth__input-error {
-    display: none;
     position: absolute;
     left: 0;
-    bottom: -16px;
+    top: 70px;
     color: rgba(238, 52, 101, 1);
     font-size: 10px;
     font-weight: 400;

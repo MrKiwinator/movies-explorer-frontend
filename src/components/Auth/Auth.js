@@ -1,21 +1,37 @@
+import React from "react";
+
 import Header from "../Header/Header";
 import AuthForm from "../AuthForm/AuthForm";
+import Preloader from "../Preloader/Preloader";
 
 import "./Auth.css";
 
 export default function Auth(props) {
+
     return(
         <div className="auth">
             <div className="auth__container">
                 <Header />
-                <AuthForm
-                    greeting={props.greeting}
-                    inputsList={props.inputsList}
-                    buttonText={props.buttonText}
-                    altText={props.altText}
-                    altLink={props.altLink}
-                    altLinkText={props.altLinkText}
-                />
+                {
+                    props.showPreloader ?
+                    <Preloader /> 
+                    :
+                    <AuthForm
+                        handleSubmitClick={props.handleSubmitClick}
+                        handleChange={props.handleChange}
+                        values={props.values}
+                        errors={props.errors}
+                        isValid={props.isValid}
+                        greeting={props.greeting}
+                        inputsList={props.inputsList}
+                        buttonText={props.buttonText}
+                        altText={props.altText}
+                        altLink={props.altLink}
+                        altLinkText={props.altLinkText}
+                        disabled={props.disabled}
+                    />
+                }
+                
             </div>
         </div>
     )
